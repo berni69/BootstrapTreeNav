@@ -1,9 +1,16 @@
+/**
+* bootstrap-treenav.js v1.0.1 by @morrissinger @berni69
+* Copyright 2013 Morris Singer
+* http://www.apache.org/licenses/LICENSE-2.0
+*/
+if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
+
 /* ==========================================================
  * bootstrap-treenav.js
  * https://github.com/morrissinger/BootstrapTreeNav
  * ==========================================================
  * Copyright 2013 Morris Singer
- *
+ * Copyright 2016 Bernat Mut
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,7 +32,9 @@
 
     var defaults = {
       navTreeExpanded: 'icon-collapse-alt',
-      navTreeCollapsed: 'icon-expand-alt'
+      navTreeCollapsed: 'icon-expand-alt',
+	  source: null
+	  
     };
     
     options = $.extend(defaults, options);
@@ -35,9 +44,47 @@
     } else if ($(this).prop('tagName') === 'UL') {
       collapsible(this, options);
     }
+    else if ($(this).prop('tagName') === 'DIV') {
+		jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">'+ createTree(options.source)+'</ul>');
+		collapsible(this, options);
+	}
 
+	
   };
 
+  
+	var createTree = function (Node,level=0){
+		
+		var attribs = "";
+		Object.keys(Node).forEach(function(member)
+		{   
+			if(member == "children") return;
+			var value = Node[member];
+			if(value != null)
+			attribs=attribs+"data-"+member+"='"+value+"' "
+		});
+		console.log(attribs);		
+		var li = '<li><a href="#" '+attribs+'">' + Node["name"] + '</a>';
+
+		if(typeof Node["children"] != "undefined"){	
+			var child = [];
+			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
+			Object.keys(Node["children"]).forEach(function(key) {
+				var childNode = Node["children"][key];
+				var x= level +1;
+				child[childNode["orden"]] = createTree(childNode,x)+'\n';				
+			});
+			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
+			child.forEach(function(obj){
+				childHtml = childHtml + obj;
+			});
+			childHtml = childHtml + '</ul>';
+			li = li + childHtml;
+		}
+		
+		return li+ '</li>';				
+	}
+  
   var collapsible = function(element, options) {
     var $childrenLi = $(element).find('li');
     $childrenLi.each(function(index, li) {
