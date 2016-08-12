@@ -4,6 +4,18 @@ http://berni69.github.io/BootstrapTreeNav
 
 BootstrapTreeNav is a javascript plugin for [Twitter Bootstrap 3](http://getbootstrap.com/) to help you create tree navigation menus, created and maintained by [Morris Singer](http://morrissinger.com).
 
+*Setting Up the dev-environment*
+We need install node.js, ruby and it's devkit.
+Once we have this we need install jshint and grunt:
+```
+npm install grunt --save-dev
+npm install --save-dev jshint
+npm update
+```
+After that we are going to install libssas for ruby:
+```
+gem install sassc
+```
 Example
 -------
 ![Bootstrap Tree Nav by Morris Singer](http://i.imgur.com/BcwvICS.png)

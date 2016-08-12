@@ -1,6 +1,6 @@
 /**
-* bootstrap-treenav.js v1.0.0 by @morrissinger
-* Copyright 2013 Morris Singer
+* bootstrap-treenav.js v1.0.1 by @morrissinger
+* Copyright 2016 Morris Singer
 * http://www.apache.org/licenses/LICENSE-2.0
 */
 
@@ -37,3 +37,5 @@ ul.nav-tree li span.opener.opened span.tree-icon-open {
 ul.nav-tree li span.opener.opened span.tree-icon-closed {
   display: none;
 }
+
+/*# sourceMappingURL=bootstrap-treenav.css.map */

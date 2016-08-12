@@ -1,81 +1,81 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="utf-8" />	
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<script src="../js/bootstrap-treenav.js"></script> 
-		<link rel="stylesheet" href="../dist/css/bootstrap-treenav.css">
-	</head>
-	
-	<body>
-		<div class="container" >
-				<h1 class="page-header">Working Tree Nav</h1>
-				<div class="row">
-					<div id="mnu"></div>
-				</div>
-				<script>
-				var dataSource = [
-						   {
-							  "id":"0",
-							  "name":"Lorem Ipsum",
-							  "id_par":null,
-							  "orden":"1",
-							  "children":{
-								 "41":{
-									"id":"41",
-									"name":"Nam sollicitudin ",
-									"id_par":"0",
-									"orden":"1",
-									"children":{
-									   "3057":{
-										  "id":"3057",
-										  "name":"Nulla vestibulum",
-										  "id_par":"41",
-										  "orden":"1",
-									   },
-									   "3058":{
-										  "id":"3058",
-										  "name":"Second child",
-										  "id_par":"41",
-										  "orden":"2",
-									   },
-									   "3059":{
-										  "id":"3059",
-										  "name":"Second child",
-										  "id_par":"41",
-										  "orden":"3",
-									   },
-										
-									}
-								 },
-								  "3057":{
-											  "id":"1",
-											  "name":"Aliquam faucibus",
-											  "id_par":null,
-											  "orden":"2",
-										   }
-							  }
-						   },
-						   
-						];
-				
-				var doubleTap = function (evt,row){
-					alert("Tapped :"+row["name"]+ "("+row["id"]+")");
-				}
-				
-				var createTree= function(){
-						jQuery('#mnu').navTree({source:dataSource[0],'createBadge':true,doubleTap:doubleTap});
-				}				
-				jQuery(document).ready(function()
-				{
-					createTree();
-				});
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap-treenav.js"></script>
+    <link rel="stylesheet" href="../dist/css/bootstrap-treenav.css">
+</head>
 
-			</script>
-		</div>
-	</body>
+<body>
+    <div class="container">
+        <h1 class="page-header">Working Tree Nav</h1>
+        <div class="row">
+            <div id="mnu"></div>
+        </div>
+        <script>
+            var dataSource = [
+                       {
+                           "id": "0",
+                           "name": "Lorem Ipsum",
+                           "id_par": null,
+                           "orden": "1",
+                           "children": {
+                               "41": {
+                                   "id": "41",
+                                   "name": "Nam sollicitudin ",
+                                   "id_par": "0",
+                                   "orden": "1",
+                                   "children": {
+                                       "3057": {
+                                           "id": "3057",
+                                           "name": "Nulla vestibulum",
+                                           "id_par": "41",
+                                           "orden": "1",
+                                       },
+                                       "3058": {
+                                           "id": "3058",
+                                           "name": "Second child",
+                                           "id_par": "41",
+                                           "orden": "2",
+                                       },
+                                       "3059": {
+                                           "id": "3059",
+                                           "name": "Second child",
+                                           "id_par": "41",
+                                           "orden": "3",
+                                       },
+
+                                   }
+                               },
+                               "3057": {
+                                   "id": "1",
+                                   "name": "Aliquam faucibus",
+                                   "id_par": "0",
+                                   "orden": "2",
+                               }
+                           }
+                       },
+
+            ];
+
+            var doubleTap = function (evt, row) {
+                alert("Tapped :" + row["name"] + "(" + row["id"] + ")");
+                
+            }
+
+            var createTree = function () {
+                jQuery('#mnu').navTree({ source: dataSource[0], 'createBadge': true, doubleTap: doubleTap });
+            }
+            jQuery(document).ready(function () {
+                createTree();
+            });
+
+        </script>
+    </div>
+</body>
 </html>

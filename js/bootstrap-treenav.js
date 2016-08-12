@@ -3,7 +3,7 @@
 * Copyright 2013 Morris Singer
 * http://www.apache.org/licenses/LICENSE-2.0
 */
-if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
+if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 
 /* ==========================================================
  * bootstrap-treenav.js
@@ -25,177 +25,174 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
  * ========================================================== */
 
 +function ($) {
-
-  'use strict';
-
-  $.fn.navTree = function(options) {
-
-    var defaults = {
-      navTreeExpanded: 'fa fa-plus-square',
-      navTreeCollapsed: 'fa fa-minus-square',
-	  orderMember: "orden",
-	  doubleTap: function(e,dataRow){},
-	  source: null,
-	  createBadge:false,
-	  
+    
+    'use strict';
+    
+    $.fn.navTree = function (args) {
+        
+        var defaults = {
+            navTreeExpanded: 'fa fa-plus-square',
+            navTreeCollapsed: 'fa fa-minus-square',
+            orderMember: 'orden',
+            doubleTap: function (e, dataRow) { },
+            source: null,
+            createBadge: false,
+        };
+        
+        var options = $.extend(defaults, args);
+        
+        if ($(this).prop('tagName') === 'LI') {
+            collapsible(this, options);
+        } else if ($(this).prop('tagName') === 'UL') {
+            collapsible(this, options);
+        }
+        else if ($(this).prop('tagName') === 'DIV') {
+            jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">' + createTree(options.source, options) + '</ul>');
+            collapsible(this, options);
+        }
+        $.touchtime = 0;
+        $('.nav-tree > li').off('click').on('click', function (evt) {
+            if ($.touchtime === 0) {
+                //set first click
+                $.touchtime = new Date().getTime();
+            } else {
+                //compare first click to this click and see if they occurred within double click threshold
+                if (((new Date().getTime()) - $.touchtime) < 800) {
+                    //double click occurred
+                    if (typeof options.doubleTap === 'function') {
+                        options.doubleTap(evt, getData(this));
+                    }
+                    $.touchtime = 0;
+                } else {
+                    //not a double click so set as a new first click
+                    $.touchtime = 0;
+                }
+            }
+            return false;
+        });
+	
     };
     
-    var options = $.extend(defaults, options);
+    var getData = function (li) {
+        var attrs = [];
+        $(li).children('a').each(function () {
+            $.each(this.attributes, function () {
+                if (this.specified && this.name.includes('data-')) {
+                    attrs[this.name.replace('data-', '')] = this.value;
+                }
+            });
+        });
+        return attrs;
+    };
     
-    if ($(this).prop('tagName') === 'LI') {
-      collapsible(this, options);
-    } else if ($(this).prop('tagName') === 'UL') {
-      collapsible(this, options);
-    }
-    else if ($(this).prop('tagName') === 'DIV') {
-		jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">'+ createTree(options.source,options)+'</ul>');
-		collapsible(this, options);
-	}
-	$.touchtime = 0;
-	$('.nav-tree > li').off('click').on('click', function(evt) {
-		if($.touchtime == 0) {
-			//set first click
-			$.touchtime = new Date().getTime();
-		} else {
-			//compare first click to this click and see if they occurred within double click threshold
-			if(((new Date().getTime())-$.touchtime) < 800) {
-				//double click occurred
-				if(typeof options.doubleTap === 'function'){
-					options.doubleTap(evt,getData(this));
-				}
-				$.touchtime = 0;
-			} else {
-				//not a double click so set as a new first click
-				$.touchtime = 0;
-			}
-		}
-		return false;
-	});
-	
-  };
-
-	var getData = function (li){
-	  var attrs=[]
-	  $(li).children('a').each(function() {
-	  $.each(this.attributes, function() {
-		if(this.specified && this.name.includes('data-')) {
-		   attrs[this.name.replace('data-','')] = this.value;			  
-		}
-	  });
-	 });
-	 return attrs;
-	
-	}
-  
-  
-	var createTree = function (Node,options,level=0){
-		
-		var hasChildren = typeof Node["children"] != "undefined";
-		var attribs = '';
-		var childHtml = '';
-
-		Object.keys(Node).forEach(function(member)
-		{   
-			if(member == "children") return;
-			var value = Node[member];
-			if(value != null)
-			attribs=attribs+"data-"+member+"='"+value+"' "
-		});
-		
-		
-		if(hasChildren){	
-			var child = [];
-			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
-			Object.keys(Node["children"]).forEach(function(key) {
-				var childNode = Node["children"][key];
-				var x= level +1;
-				child[childNode[options.orderMember]] = createTree(childNode,options,x)+'\n';				
-			});
-			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
-			child.forEach(function(obj){
-				childHtml = childHtml + obj;
-			});
-			childHtml = childHtml + '</ul>';
-			attribs = attribs +'data-badge="'+(child.length-1)+'" '
-		}
-		return '<li><a href="#" '+attribs+'>' + Node["name"] + '</a>'+childHtml+'</li>';
-	}
-  
-  var collapsible = function(element, options) {
-    var $childrenLi = $(element).find('li');
-    $childrenLi.each(function(index, li) {
-      collapsibleAll($(li), options);
-		if(options.createBadge && typeof $(li).children('a').attr('data-badge')!="undefined"){
-			$(li).children('a').append('<span class="badge pull-right">'+$(li).children('a').attr('data-badge')+'</span>')
-		}
-		
-      // Expand the tree so that the active item is shown.
-      if ($(li).hasClass('active')) {
-        $(li).parents('ul').each(function(i, ul) {
-          $(ul).show();
-          $(ul).siblings('span.opener')
+    
+    var createTree = function (Node, options, level) {
+        
+        var hasChildren = typeof Node.children !== 'undefined';
+        var attribs = '';
+        var childHtml = '';
+        
+        Object.keys(Node).forEach(function (member) {
+            if (member !== 'children') { return; }
+            var value = Node[member];
+            if (value !== null) {
+                attribs = attribs + 'data-' + member + '="' + value + '" ';
+            }
+        });
+        
+        
+        if (hasChildren) {
+            var child = [];
+            Object.keys(Node.children).forEach(function (key) {
+                var childNode = Node.children[key];
+                var x = level + 1;
+                child[childNode[options.orderMember]] = createTree(childNode, options, x) + '\n';
+            });
+            childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
+            child.forEach(function (obj) {
+                childHtml = childHtml + obj;
+            });
+            childHtml = childHtml + '</ul>';
+            attribs = attribs + 'data-badge="' + (child.length - 1) + '" ';
+        }
+        return '<li><a href="#" ' + attribs + '>' + Node.name + '</a>' + childHtml + '</li>';
+    };
+    
+    var collapsible = function (element, options) {
+        var $childrenLi = $(element).find('li');
+        $childrenLi.each(function (index, li) {
+            collapsibleAll($(li), options);
+            if (options.createBadge && typeof $(li).children('a').attr('data-badge') !== 'undefined') {
+                $(li).children('a').append('<span class="badge pull-right">' + $(li).children('a').attr('data-badge') + '</span>');
+            }
+            
+            // Expand the tree so that the active item is shown.
+            if ($(li).hasClass('active')) {
+                $(li).parents('ul').each(function (i, ul) {
+                    $(ul).show();
+                    $(ul).siblings('span.opener')
                .removeClass('closed')
                .addClass('opened');
+                    
+                    // If there's a real target to this menu item link, then allow it to be
+                    // clicked to go to that page, now that the menu has been expanded.
+                    if ($(ul).siblings('a').attr('href') !== '#' && $(ul).siblings('a').attr('href') !== '') {
+                        $(ul).siblings('a').off('click.bs.tree');
+                    }
 
-          // If there's a real target to this menu item link, then allow it to be
-          // clicked to go to that page, now that the menu has been expanded.
-          if ($(ul).siblings('a').attr('href') !== '#' && $(ul).siblings('a').attr('href') !== '') {
-            $(ul).siblings('a').off('click.bs.tree');
-          }
-
+                });
+            }
         });
-      }
-    });
-  };
-
-  var collapsibleAll = function(element, options) {
-    var $childUl = $(element).children('ul');
-    if ( $childUl.length > 0 ) {
-      $childUl.hide();
-      $(element).prepend('<span class="opener closed"><span class="tree-icon-closed"><i class="' + options.navTreeCollapsed + ' aria-hidden="true"></i></span><span class="tree-icon-opened"><i class="' + options.navTreeExpanded + '"></i></span></span>');
-      $(element).children('a').first().on('click.bs.tree', function(e) {
-        e.preventDefault();
-        var $opener = $(this).siblings('span.opener');
-        if ($opener.hasClass('closed')) {
-          expand(element);
-
-          // If there's a real target to this menu item link, then allow it to be
-          // clicked to go to that page, now that the menu has been expanded.
-          if (($(this).attr('href') !== '#') && ($(this).attr('href') !== '')) {
-            $(this).off('click.bs.tree');
-          }
+    };
+    
+    var collapsibleAll = function (element, options) {
+        var $childUl = $(element).children('ul');
+        if ($childUl.length > 0) {
+            $childUl.hide();
+            $(element).prepend('<span class="opener closed"><span class="tree-icon-closed"><i class="' + options.navTreeCollapsed + ' aria-hidden="true"></i></span><span class="tree-icon-opened"><i class="' + options.navTreeExpanded + '"></i></span></span>');
+            $(element).children('a').first().on('click.bs.tree', function (e) {
+                e.preventDefault();
+                var $opener = $(this).siblings('span.opener');
+                if ($opener.hasClass('closed')) {
+                    expand(element);
+                    
+                    // If there's a real target to this menu item link, then allow it to be
+                    // clicked to go to that page, now that the menu has been expanded.
+                    if (($(this).attr('href') !== '#') && ($(this).attr('href') !== '')) {
+                        $(this).off('click.bs.tree');
+                    }
             
-        } else {
-          collapse(element);
+                } else {
+                    collapse(element);
+                }
+            });
+            $(element).children('span.opener').first().on('click.bs.tree', function (e) {
+                var $opener = $(this);
+                if ($opener.hasClass('closed')) {
+                    expand(element);
+                } else {
+                    collapse(element);
+                }
+            });
         }
-      });
-      $(element).children('span.opener').first().on('click.bs.tree', function(e){
-        var $opener = $(this);
-        if ($opener.hasClass('closed')) {
-          expand(element);
-        } else {
-          collapse(element);
-        }
-      });
-    }
-  };
-
-  var expand = function(element) {
-    var $opener = $(element).children('span.opener');
-    $opener.removeClass('closed').addClass('opened');
-    $(element).children('ul').first().slideDown('fast');
-  };
-
-  var collapse = function(element) {
-    var $opener = $(element).children('span.opener');
-    $opener.removeClass('opened').addClass('closed');
-    $(element).children('ul').first().slideUp('fast');
-  };
-
-  $('ul[data-toggle=nav-tree]').each(function(){
-    var $tree;
-    $tree = $(this);
-    $tree.navTree($tree.data());
-  });
+    };
+    
+    var expand = function (element) {
+        var $opener = $(element).children('span.opener');
+        $opener.removeClass('closed').addClass('opened');
+        $(element).children('ul').first().slideDown('fast');
+    };
+    
+    var collapse = function (element) {
+        var $opener = $(element).children('span.opener');
+        $opener.removeClass('opened').addClass('closed');
+        $(element).children('ul').first().slideUp('fast');
+    };
+    
+    $('ul[data-toggle=nav-tree]').each(function () {
+        var $tree;
+        $tree = $(this);
+        $tree.navTree($tree.data());
+    });
     
 }(window.jQuery);
