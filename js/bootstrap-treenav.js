@@ -93,7 +93,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         var childHtml = '';
         
         Object.keys(Node).forEach(function (member) {
-            if (member !== 'children') { return; }
+            if (member === 'children') { return; }
             var value = Node[member];
             if (value !== null) {
                 attribs = attribs + 'data-' + member + '="' + value + '" ';
