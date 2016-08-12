@@ -15,133 +15,133 @@ Clone the repo, `git clone git://github.com/berni69/BootstrapTreeNav.git`, or [d
 
 Add CSS, or SASS to your project, as appropriate, and add JS. Also, add [Font Awesome](http://fontawesome.io/) to your project, if you are not already including it with your installation of Twitter Bootstrap. Then, write your HTML:
 ```html
-     <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
-         <li>
-             <a href="http://www.example.com" target="_blank">Item One (With Children) (has link)</a>
-             <ul class="nav nav-pills nav-stacked nav-tree">
-                 <li>
-                     <a href="#">Item A (Without Children)</a>
-                 </li>
-                 <li>
-                     <a href="#">Item B (Without Children)</a>
-                 </li>
-                 <li>
-                     <a href="#">Item C (Without Children)</a>
-                 </li>
-             </ul>
-         </li>
-         <li>
-             <a href="#">Item Two (Without Children)</a>
-         </li>
-         <li>
-             <a href="#">Item Three (With Children and Grandchildren)</a>
-             <ul class="nav nav-pills nav-stacked nav-tree">
-                 <li>
-                     <a href="#">Item A (With Children)</a>
-                     <ul class="nav nav-pills nav-stacked nav-tree">
-                         <li>
-                             <a href="#">Item I (Without Children)</a>
-                         </li>
-                         <li>
-                             <a href="#">Item II (Without Children)</a>
-                         </li>
-                         <li class="active">
-                             <a href="#">Item III (Without Children)</a>
-                         </li>
-                     </ul>
-                 </li>
-                 <li>
-                     <a href="#">Item B (Without Children)</a>
-                 </li>
-                 <li>
-                     <a href="#">Item C (With Children)</a>
-                     <ul class="nav nav-pills nav-stacked nav-tree">
-                         <li>
-                             <a href="#">Item I (Without Children)</a>
-                         </li>
-                         <li>
-                             <a href="#">Item II (Without Children)</a>
-                         </li>
-                         <li>
-                             <a href="#">Item III (Without Children)</a>
-                         </li>
-                     </ul>
-                 </li>
-             </ul>
-         </li>
-     </ul>	 
+ <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
+	 <li>
+		 <a href="http://www.example.com" target="_blank">Item One (With Children) (has link)</a>
+		 <ul class="nav nav-pills nav-stacked nav-tree">
+			 <li>
+				 <a href="#">Item A (Without Children)</a>
+			 </li>
+			 <li>
+				 <a href="#">Item B (Without Children)</a>
+			 </li>
+			 <li>
+				 <a href="#">Item C (Without Children)</a>
+			 </li>
+		 </ul>
+	 </li>
+	 <li>
+		 <a href="#">Item Two (Without Children)</a>
+	 </li>
+	 <li>
+		 <a href="#">Item Three (With Children and Grandchildren)</a>
+		 <ul class="nav nav-pills nav-stacked nav-tree">
+			 <li>
+				 <a href="#">Item A (With Children)</a>
+				 <ul class="nav nav-pills nav-stacked nav-tree">
+					 <li>
+						 <a href="#">Item I (Without Children)</a>
+					 </li>
+					 <li>
+						 <a href="#">Item II (Without Children)</a>
+					 </li>
+					 <li class="active">
+						 <a href="#">Item III (Without Children)</a>
+					 </li>
+				 </ul>
+			 </li>
+			 <li>
+				 <a href="#">Item B (Without Children)</a>
+			 </li>
+			 <li>
+				 <a href="#">Item C (With Children)</a>
+				 <ul class="nav nav-pills nav-stacked nav-tree">
+					 <li>
+						 <a href="#">Item I (Without Children)</a>
+					 </li>
+					 <li>
+						 <a href="#">Item II (Without Children)</a>
+					 </li>
+					 <li>
+						 <a href="#">Item III (Without Children)</a>
+					 </li>
+				 </ul>
+			 </li>
+		 </ul>
+	 </li>
+ </ul>	 
 ```
 In Javascript call it with:
 
 
 ```js
-	jQuery(document).ready(function()
-	{
-			jQuery('#myTree').navTree();
-	});
+jQuery(document).ready(function()
+{
+		jQuery('#myTree').navTree();
+});
 ```
 
 
 Create tree from datasource:
 ```html
-				<div class="row">
-					<div id="mnu"></div>
-				</div>
-				<script>
-				var dataSource = [
-						   {
-							  "id":"0",
-							  "name":"Lorem Ipsum",
+<div class="row">
+	<div id="mnu"></div>
+</div>
+<script>
+var dataSource = [
+		   {
+			  "id":"0",
+			  "name":"Lorem Ipsum",
+			  "id_par":null,
+			  "orden":"1",
+			  "children":{
+				 "41":{
+					"id":"41",
+					"name":"Nam sollicitudin ",
+					"id_par":"0",
+					"orden":"1",
+					"children":{
+					   "3057":{
+						  "id":"3057",
+						  "name":"Nulla vestibulum",
+						  "id_par":"41",
+						  "orden":"1",
+					   },
+					   "3058":{
+						  "id":"3058",
+						  "name":"Second child",
+						  "id_par":"41",
+						  "orden":"2",
+					   },
+					   "3059":{
+						  "id":"3059",
+						  "name":"Second child",
+						  "id_par":"41",
+						  "orden":"3",
+					   },
+						
+					}
+				 },
+				  "3057":{
+							  "id":"1",
+							  "name":"Aliquam faucibus",
 							  "id_par":null,
-							  "orden":"1",
-							  "children":{
-								 "41":{
-									"id":"41",
-									"name":"Nam sollicitudin ",
-									"id_par":"0",
-									"orden":"1",
-									"children":{
-									   "3057":{
-										  "id":"3057",
-										  "name":"Nulla vestibulum",
-										  "id_par":"41",
-										  "orden":"1",
-									   },
-									   "3058":{
-										  "id":"3058",
-										  "name":"Second child",
-										  "id_par":"41",
-										  "orden":"2",
-									   },
-									   "3059":{
-										  "id":"3059",
-										  "name":"Second child",
-										  "id_par":"41",
-										  "orden":"3",
-									   },
-										
-									}
-								 },
-								  "3057":{
-											  "id":"1",
-											  "name":"Aliquam faucibus",
-											  "id_par":null,
-											  "orden":"2",
-										   }
-							  }
-						   },
-						   
-						];
-				
-				var createTree= function(){
-						jQuery('#mnu').navTree({source:dataSource[0],'createBadge':true});
-				}				
-				jQuery(document).ready(function()
-				{
-					createTree();
-				});
+							  "orden":"2",
+						   }
+			  }
+		   },
+		   
+		];
 
-			</script>
+var createTree= function(){
+		jQuery('#mnu').navTree({source:dataSource[0],'createBadge':true});
+}				
+jQuery(document).ready(function()
+{
+	createTree();
+});
+
+</script>
 
 ```
 

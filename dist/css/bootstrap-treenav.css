@@ -20,7 +20,7 @@ ul.nav-tree li a {
 }
 ul.nav-tree li span.opener {
   position: absolute;
-  top: 5px;
+  top: 10px;
   left: 10px;
   color: #444;
   z-index: +1;
