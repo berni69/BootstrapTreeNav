@@ -34,6 +34,7 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
       navTreeExpanded: 'fa fa-plus-square',
       navTreeCollapsed: 'fa fa-minus-square',
 	  orderMember: "orden",
+	  doubleTap: function(e,dataRow){},
 	  source: null,
 	  createBadge:false,
 	  
@@ -50,10 +51,42 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
 		jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">'+ createTree(options.source,options)+'</ul>');
 		collapsible(this, options);
 	}
-
+	$.touchtime = 0;
+	$('.nav-tree > li').off('click').on('click', function(evt) {
+		if($.touchtime == 0) {
+			//set first click
+			$.touchtime = new Date().getTime();
+		} else {
+			//compare first click to this click and see if they occurred within double click threshold
+			if(((new Date().getTime())-$.touchtime) < 800) {
+				//double click occurred
+				if(typeof options.doubleTap === 'function'){
+					options.doubleTap(evt,getData(this));
+				}
+				$.touchtime = 0;
+			} else {
+				//not a double click so set as a new first click
+				$.touchtime = 0;
+			}
+		}
+		return false;
+	});
 	
   };
 
+	var getData = function (li){
+	  var attrs=[]
+	  $(li).children('a').each(function() {
+	  $.each(this.attributes, function() {
+		if(this.specified && this.name.includes('data-')) {
+		   attrs[this.name.replace('data-','')] = this.value;			  
+		}
+	  });
+	 });
+	 return attrs;
+	
+	}
+  
   
 	var createTree = function (Node,options,level=0){
 		
@@ -92,7 +125,6 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
     var $childrenLi = $(element).find('li');
     $childrenLi.each(function(index, li) {
       collapsibleAll($(li), options);
-        console.log($(li).children('a'))
 		if(options.createBadge && typeof $(li).children('a').attr('data-badge')!="undefined"){
 			$(li).children('a').append('<span class="badge pull-right">'+$(li).children('a').attr('data-badge')+'</span>')
 		}

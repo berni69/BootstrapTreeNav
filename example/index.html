@@ -63,8 +63,12 @@
 						   
 						];
 				
+				var doubleTap = function (evt,row){
+					alert("Tapped :"+row["name"]+ "("+row["id"]+")");
+				}
+				
 				var createTree= function(){
-						jQuery('#mnu').navTree({source:dataSource[0],'createBadge':true});
+						jQuery('#mnu').navTree({source:dataSource[0],'createBadge':true,doubleTap:doubleTap});
 				}				
 				jQuery(document).ready(function()
 				{
