@@ -33,11 +33,13 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
     var defaults = {
       navTreeExpanded: 'icon-collapse-alt',
       navTreeCollapsed: 'icon-expand-alt',
-	  source: null
+	  orderMember: "orden",
+	  source: null,
+	  createBadge:false,
 	  
     };
     
-    options = $.extend(defaults, options);
+    var options = $.extend(defaults, options);
     
     if ($(this).prop('tagName') === 'LI') {
       collapsible(this, options);
@@ -45,7 +47,7 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
       collapsible(this, options);
     }
     else if ($(this).prop('tagName') === 'DIV') {
-		jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">'+ createTree(options.source)+'</ul>');
+		jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">'+ createTree(options.source,options)+'</ul>');
 		collapsible(this, options);
 	}
 
@@ -53,9 +55,12 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
   };
 
   
-	var createTree = function (Node,level=0){
+	var createTree = function (Node,options,level=0){
 		
-		var attribs = "";
+		var hasChildren = typeof Node["children"] != "undefined";
+		var attribs = '';
+		var childHtml = '';
+
 		Object.keys(Node).forEach(function(member)
 		{   
 			if(member == "children") return;
@@ -63,33 +68,35 @@ if (!jQuery) { throw new Error("Bootstrap Tree Nav requires jQuery"); }
 			if(value != null)
 			attribs=attribs+"data-"+member+"='"+value+"' "
 		});
-		console.log(attribs);		
-		var li = '<li><a href="#" '+attribs+'">' + Node["name"] + '</a>';
-
-		if(typeof Node["children"] != "undefined"){	
+		
+		
+		if(hasChildren){	
 			var child = [];
 			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
 			Object.keys(Node["children"]).forEach(function(key) {
 				var childNode = Node["children"][key];
 				var x= level +1;
-				child[childNode["orden"]] = createTree(childNode,x)+'\n';				
+				child[childNode[options.orderMember]] = createTree(childNode,options,x)+'\n';				
 			});
 			var  childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
 			child.forEach(function(obj){
 				childHtml = childHtml + obj;
 			});
 			childHtml = childHtml + '</ul>';
-			li = li + childHtml;
+			attribs = attribs +'data-badge="'+(child.length-1)+'" '
 		}
-		
-		return li+ '</li>';				
+		return '<li><a href="#" '+attribs+'>' + Node["name"] + '</a>'+childHtml+'</li>';
 	}
   
   var collapsible = function(element, options) {
     var $childrenLi = $(element).find('li');
     $childrenLi.each(function(index, li) {
       collapsibleAll($(li), options);
-      
+        console.log($(li).children('a'))
+		if(options.createBadge && typeof $(li).children('a').attr('data-badge')!="undefined"){
+			$(li).children('a').append('<span class="badge pull-right">'+$(li).children('a').attr('data-badge')+'</span>')
+		}
+		
       // Expand the tree so that the active item is shown.
       if ($(li).hasClass('active')) {
         $(li).parents('ul').each(function(i, ul) {
