@@ -1,6 +1,6 @@
 BootstrapTreeNav
 ====================
-http://berni69.github.io/BootstrapTreeNav
+[http://berni69.github.io/BootstrapTreeNav](http://berni69.github.io/BootstrapTreeNav)
 
 BootstrapTreeNav is a javascript plugin for [Twitter Bootstrap 3](http://getbootstrap.com/) to help you create tree navigation menus, created and maintained by [Morris Singer](http://morrissinger.com).
 
@@ -16,7 +16,7 @@ gem install sassc
 ```
 Example
 -------
-![Bootstrap Tree Nav by Morris Singer](http://i.imgur.com/BcwvICS.png)
+![Bootstrap Tree Nav by Morris Singer](http://www.bitsdelocos.es/wp-content/uploads/2016/08/workingtree.png)
 
 Quick start
 -----------
@@ -161,9 +161,9 @@ Using the data API, you can also specify icons to display next to expanded and c
 * `data-nav-tree-expanded="icon-collapse-alt"`: Use the Font Awesome icon `icon-collapse-alt` next to expanded items.
 * `data-nav-tree-collapsed="icon-expand-alt"`: Use the Font Awesome icon `icon-expand-alt` next to collapsed items.
 
-+All data passed in json will be inserted into the attribs to the div element. 
-+Name and orden are mandatories.
-+You can change the member name 'orden' name with the option orderMember
++ All members passed into json datasource will be inserted into the attribs to the div element. 
++ **Name** and **orden** are mandatories.
++ You can change the member name `orden` name with the option orderMember
 
 Authors
 -------
