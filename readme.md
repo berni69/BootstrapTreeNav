@@ -27,53 +27,53 @@ Add CSS, or SASS to your project, as appropriate, and add JS. Also, add [Font Aw
 ```html
  <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
 	 <li>
-		 <a href="http://www.example.com" target="_blank">Item One (With Children) (has link)</a>
+		 <div><a href="http://www.example.com" target="_blank">Item One (With Children) (has link)</a></div>
 		 <ul class="nav nav-pills nav-stacked nav-tree">
 			 <li>
-				 <a href="#">Item A (Without Children)</a>
+				 <div><a href="#">Item A (Without Children)</a></div>
 			 </li>
 			 <li>
-				 <a href="#">Item B (Without Children)</a>
+				 <div><a href="#">Item B (Without Children)</a></div>
 			 </li>
 			 <li>
-				 <a href="#">Item C (Without Children)</a>
+				 <div><a href="#">Item C (Without Children)</a></div>
 			 </li>
 		 </ul>
 	 </li>
 	 <li>
-		 <a href="#">Item Two (Without Children)</a>
+		 <div><a href="#">Item Two (Without Children)</a></div>
 	 </li>
 	 <li>
-		 <a href="#">Item Three (With Children and Grandchildren)</a>
+		 <div><a href="#">Item Three (With Children and Grandchildren)</a></div>
 		 <ul class="nav nav-pills nav-stacked nav-tree">
 			 <li>
-				 <a href="#">Item A (With Children)</a>
+				 <div><a href="#">Item A (With Children)</a></div>
 				 <ul class="nav nav-pills nav-stacked nav-tree">
 					 <li>
-						 <a href="#">Item I (Without Children)</a>
+						 <div><a href="#">Item I (Without Children)</a></div>
 					 </li>
 					 <li>
-						 <a href="#">Item II (Without Children)</a>
+						 <div><a href="#">Item II (Without Children)</a></div>
 					 </li>
 					 <li class="active">
-						 <a href="#">Item III (Without Children)</a>
+						 <div><a href="#">Item III (Without Children)</a></div>
 					 </li>
 				 </ul>
 			 </li>
 			 <li>
-				 <a href="#">Item B (Without Children)</a>
+				 <div><a href="#">Item B (Without Children)</a></div>
 			 </li>
 			 <li>
-				 <a href="#">Item C (With Children)</a>
+				 <div><a href="#">Item C (With Children)</a></div>
 				 <ul class="nav nav-pills nav-stacked nav-tree">
 					 <li>
-						 <a href="#">Item I (Without Children)</a>
+						 <div><a href="#">Item I (Without Children)</a></div>
 					 </li>
 					 <li>
-						 <a href="#">Item II (Without Children)</a>
+						 <div><a href="#">Item II (Without Children)</a></div>
 					 </li>
 					 <li>
-						 <a href="#">Item III (Without Children)</a>
+						 <div><a href="#">Item III (Without Children)</a></div>
 					 </li>
 				 </ul>
 			 </li>
@@ -160,6 +160,10 @@ jQuery(document).ready(function()
 Using the data API, you can also specify icons to display next to expanded and collapsed tree items:
 * `data-nav-tree-expanded="icon-collapse-alt"`: Use the Font Awesome icon `icon-collapse-alt` next to expanded items.
 * `data-nav-tree-collapsed="icon-expand-alt"`: Use the Font Awesome icon `icon-expand-alt` next to collapsed items.
+
++All data passed in json will be inserted into the attribs to the div element. 
++Name and orden are mandatories.
++You can change the member name 'orden' name with the option orderMember
 
 Authors
 -------
