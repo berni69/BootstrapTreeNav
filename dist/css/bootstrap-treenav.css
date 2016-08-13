@@ -15,26 +15,25 @@ ul.nav-tree li {
   position: relative;
   margin-left: -15px;
 }
-ul.nav-tree li a {
-  text-indent: 15px;
+ul.nav-tree li div.contentElement a {
+  padding-left: 15px;
 }
-ul.nav-tree li span.opener {
+ul.nav-tree li div.contentElement span.opener {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  left: -5px;
   color: #444;
   z-index: +1;
 }
-ul.nav-tree li span.opener.closed span.tree-icon-opened {
+ul.nav-tree li div.contentElement span.opener.closed span.tree-icon-opened {
   display: none;
 }
-ul.nav-tree li span.opener.closed span.tree-icon-closed {
+ul.nav-tree li div.contentElement span.opener.closed span.tree-icon-closed {
   display: block;
 }
-ul.nav-tree li span.opener.opened span.tree-icon-open {
+ul.nav-tree li div.contentElement span.opener.opened span.tree-icon-open {
   display: block;
 }
-ul.nav-tree li span.opener.opened span.tree-icon-closed {
+ul.nav-tree li div.contentElement span.opener.opened span.tree-icon-closed {
   display: none;
 }
 
