@@ -26,63 +26,18 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 
 +function ($) {
     
-    'use strict';
-    var oldContainer;
-    $.fn.navTree = function (args) {
-        
-        var defaults = {
-            navTreeExpanded: 'fa fa-plus-square',
-            navTreeCollapsed: 'fa fa-minus-square',
-            orderMember: 'orden',
-            doubleTap: function (e, dataRow) { },
-            enableDragDrop: false,
-            source: null,
-            createBadge: false,
-        };
-        
-        var options = $.extend(defaults, args);
-        
-        if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
-            throw new Error('Bootstrap Tree Nav drag and drop requires jquery-ui-nestedSortable plugin');
-        }
-        
-        if ($(this).prop('tagName') === 'LI') {
-            collapsible(this, options);
-        } else if ($(this).prop('tagName') === 'UL') {
-            collapsible(this, options);
-        }
-        else if ($(this).prop('tagName') === 'DIV') {
-            jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">' + createTree(options.source, options) + '</ul>');
-            if (options.enableDragDrop) {
-            //if (false) {
-                $(this).children('ul').nestedSortable({
-                    listType:'ul',
-                    forcePlaceholderSize: true,
-                    handle: 'div',
-                    helper: 'clone',
-                    items: 'li',
-                    opacity: 0.6,
-                    placeholder: 'placeholder',
-                    revert: 250,
-                    tabSize: 25,
-                    tolerance: 'pointer',
-                    toleranceElement: '> div',
-                    maxLevels: 4,
-                    isTree: true,
-                    expandOnHover: 700,
-                    startCollapsed: false,
-                    change: function () {
-                        console.log('Relocated item');
-                    }
-                });
-            }
-            collapsible(this, options);
-        }
-        
-        setDoubleClick(options);
-	
+    'use strict';   
+    var getData = function (li) {
+        var attrs = [];
+        $(li).children('div').each(function () {
+            $.each(this.attributes, function () {
+                if (this.specified && this.name.includes('data-')) {
+                    attrs[this.name.replace('data-', '')] = this.value;
+                }
+            });
+        });
+        return attrs;
     };
-    
     var setDoubleClick = function (options) {
         $.touchtime = 0;
         $('.nav-tree > li').off('click').on('click', function (evt) {
@@ -101,19 +56,6 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             return false;
         });
     };
-    
-    var getData = function (li) {
-        var attrs = [];
-        $(li).children('div').each(function () {
-            $.each(this.attributes, function () {
-                if (this.specified && this.name.includes('data-')) {
-                    attrs[this.name.replace('data-', '')] = this.value;
-                }
-            });
-        });
-        return attrs;
-    };
-    
     
     var createTree = function (Node, options, level) {
         
@@ -147,33 +89,18 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         return '<li><div class="contentElement" ' + attribs + '><a href="#" >' + Node.name + '</a></div>' + childHtml + '</li>';
     };
     
-    var collapsible = function (element, options) {
-        var $childrenLi = $(element).find('li');
-        $childrenLi.each(function (index, li) {
-            collapsibleAll($(li), options);
-            if (options.createBadge && typeof $(li).children('div').attr('data-badge') !== 'undefined') {
-                $(li).children('div').append('<span class="badge pull-right">' + $(li).children('div').attr('data-badge') + '</span>');
-            }
-            
-            // Expand the tree so that the active item is shown.
-            if ($(li).hasClass('active')) {
-                $(li).parents('ul').each(function (i, ul) {
-                    $(ul).show();
-                    $(ul).siblings('div').children('span.opener').first()
-               .removeClass('closed')
-               .addClass('opened');
-                    
-                    // If there's a real target to this menu item link, then allow it to be
-                    // clicked to go to that page, now that the menu has been expanded.
-                    if ($(ul).find('a').attr('href') !== '#' && $(ul).find('a').attr('href') !== '') {
-                        $(ul).siblings('a').off('click.bs.tree');
-                    }
-
-                });
-            }
-        });
+    var expand = function (li) {
+        var $opener = $(li).children('div').children('span.opener');
+        $opener.removeClass('closed').addClass('opened');
+        $(li).children('ul').first().slideDown('fast');
     };
     
+    var collapse = function (li) {
+        var $opener = $(li).children('div').children('span.opener');
+        $opener.removeClass('opened').addClass('closed');
+        $(li).children('ul').first().slideUp('fast');
+    };
+
     var collapsibleAll = function (element, options) {
         var $childUl = $(element).children('ul');
         if ($childUl.length > 0) {
@@ -205,23 +132,93 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             });
         }
     };
-    
-    var expand = function (li) {
-        var $opener = $(li).children('div').children('span.opener');
-        $opener.removeClass('closed').addClass('opened');
-        $(li).children('ul').first().slideDown('fast');
+
+    var collapsible = function (element, options) {
+        var $childrenLi = $(element).find('li');
+        $childrenLi.each(function (index, li) {
+            collapsibleAll($(li), options);
+            if (options.createBadge && typeof $(li).children('div').attr('data-badge') !== 'undefined') {
+                $(li).children('div').append('<span class="badge pull-right">' + $(li).children('div').attr('data-badge') + '</span>');
+            }
+            
+            // Expand the tree so that the active item is shown.
+            if ($(li).hasClass('active')) {
+                $(li).parents('ul').each(function (i, ul) {
+                    $(ul).show();
+                    $(ul).siblings('div').children('span.opener').first()
+               .removeClass('closed')
+               .addClass('opened');
+                    
+                    // If there's a real target to this menu item link, then allow it to be
+                    // clicked to go to that page, now that the menu has been expanded.
+                    if ($(ul).find('a').attr('href') !== '#' && $(ul).find('a').attr('href') !== '') {
+                        $(ul).siblings('a').off('click.bs.tree');
+                    }
+
+                });
+            }
+        });
     };
-    
-    var collapse = function (li) {
-        var $opener = $(li).children('div').children('span.opener');
-        $opener.removeClass('opened').addClass('closed');
-        $(li).children('ul').first().slideUp('fast');
-    };
+
     
     $('ul[data-toggle=nav-tree]').each(function () {
         var $tree;
         $tree = $(this);
         $tree.navTree($tree.data());
     });
+
+    $.fn.navTree = function (args) {        
+        var defaults = {
+            navTreeExpanded: 'fa fa-plus-square',
+            navTreeCollapsed: 'fa fa-minus-square',
+            orderMember: 'orden',
+            doubleTap: function (e, dataRow) { },
+            enableDragDrop: false,
+            source: null,
+            createBadge: false,
+        };
+        
+        var options = $.extend(defaults, args);
+        
+        if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
+            throw new Error('Bootstrap Tree Nav drag and drop requires jquery-ui-nestedSortable plugin');
+        }
+        
+        if ($(this).prop('tagName') === 'LI') {
+            collapsible(this, options);
+        } else if ($(this).prop('tagName') === 'UL') {
+            collapsible(this, options);
+        }
+        else if ($(this).prop('tagName') === 'DIV') {
+            jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">' + createTree(options.source, options) + '</ul>');
+            if (options.enableDragDrop) {
+                //if (false) {
+                $(this).children('ul').nestedSortable({
+                    listType: 'ul',
+                    forcePlaceholderSize: true,
+                    handle: 'div',
+                    helper: 'clone',
+                    items: 'li',
+                    opacity: 0.6,
+                    placeholder: 'placeholder',
+                    revert: 250,
+                    tabSize: 25,
+                    tolerance: 'pointer',
+                    toleranceElement: '> div',
+                    maxLevels: 4,
+                    isTree: true,
+                    expandOnHover: 700,
+                    startCollapsed: false,
+                    change: function () {
+                        console.log('Relocated item');
+                    }
+                });
+            }
+            collapsible(this, options);
+        }
+        
+        setDoubleClick(options);
+	
+    };
     
 }(window.jQuery);

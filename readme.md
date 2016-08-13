@@ -8,8 +8,6 @@ BootstrapTreeNav is a javascript plugin for [Twitter Bootstrap 3](http://getboot
 We need install node.js, ruby and it's devkit.
 Once we have this we need install jshint and grunt:
 ```
-npm install grunt --save-dev
-npm install --save-dev jshint
 npm update
 ```
 After that we are going to install libssas for ruby:

@@ -1,7 +1,7 @@
 /**
-* bootstrap-treenav.js v1.0.1 by @morrissinger
-* Copyright 2016 Morris Singer
-* http://www.apache.org/licenses/LICENSE-2.0
+* bootstrap-treenav.js v1.0.1 
+* Copyright 2016 Bernat Mut
+* Copyright 2013 Morris Singer by @morrissinger
 */
 
 ul.nav-tree{list-style:none;margin-left:20px}ul.nav-tree ul.nav-tree{margin-left:45px}ul.nav-tree li{position:relative;margin-left:-15px}ul.nav-tree li div.contentElement a{padding-left:15px}ul.nav-tree li div.contentElement span.opener{position:absolute;left:-5px;color:#444;z-index:+1}ul.nav-tree li div.contentElement span.opener.closed span.tree-icon-opened{display:none}ul.nav-tree li div.contentElement span.opener.closed span.tree-icon-closed{display:block}ul.nav-tree li div.contentElement span.opener.opened span.tree-icon-open{display:block}ul.nav-tree li div.contentElement span.opener.opened span.tree-icon-closed{display:none}
