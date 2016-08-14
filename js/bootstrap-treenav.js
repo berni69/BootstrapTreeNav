@@ -26,7 +26,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 
 +function ($) {
     
-    'use strict';   
+    'use strict';
     var getData = function (li) {
         var attrs = [];
         $(li).children('div').each(function () {
@@ -39,18 +39,19 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         return attrs;
     };
     var setDoubleClick = function (options) {
-        $.touchtime = 0;
+        $.touchtime = [];
         $('.nav-tree > li').off('click').on('click', function (evt) {
-            if ($.touchtime === 0) {
-                $.touchtime = new Date().getTime();
+            var id = $(this).attr('id');
+            if (typeof $.touchtime[id] === 'undefined' || $.touchtime[id] === 0) {
+                $.touchtime[id] = new Date().getTime();
             } else {
-                if (((new Date().getTime()) - $.touchtime) < 800) {
+                if (((new Date().getTime()) - $.touchtime[id]) < 800) {
                     if (typeof options.doubleTap === 'function') {
                         options.doubleTap(evt, getData(this));
                     }
-                    $.touchtime = 0;
+                    $.touchtime[id] = 0;
                 } else {
-                    $.touchtime = 0;
+                    $.touchtime[id] = 0;
                 }
             }
             return false;
@@ -70,8 +71,6 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
                 attribs = attribs + 'data-' + member + '="' + value + '" ';
             }
         });
-        
-        //        childHtml = '<ul class="nav nav-pills nav-stacked nav-tree">\n';
         childHtml = '<ul>\n';
         if (hasChildren) {
             var child = [];
@@ -86,8 +85,8 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             attribs = attribs + 'data-badge="' + (child.length - 1) + '" ';
         }
         childHtml = childHtml + '</ul>';
-
-        return '<li><div class="contentElement" ' + attribs + '><a href="#" >' + Node.name + '</a></div>' + childHtml + '</li>';
+        
+        return '<li  id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a></div>' + childHtml + '</li>';
     };
     
     var expand = function (li) {
@@ -139,21 +138,21 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             });
         }
     };
-
+    
     var collapsibleAll = function (element, options) {
         var $childUl = $(element).children('ul');
-        $childUl.removeClass('nav nav-pills nav-stacked nav-tree').addClass('nav nav-pills nav-stacked nav-tree');
+        $childUl.removeClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses).addClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses);
         $childUl.hide();
-        createOpener(element,options,'closed');
+        createOpener(element, options, 'closed');
     };
-
+    
     var collapsible = function (ul, options) {
         var $ul = $(ul);
         var $childrenLi = $ul.find('li');
-        $ul.removeClass('nav nav-pills nav-stacked nav-tree').addClass('nav nav-pills nav-stacked nav-tree');
+        $ul.removeClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses).addClass('nav nav-pills nav-stacked nav-tree' + options.treeClasses);
         $childrenLi.each(function (index, li) {
             collapsibleAll($(li), options);
-            appendBadge(li,options);
+            appendBadge(li, options);
             
             // Expand the tree so that the active item is shown.
             if ($(li).hasClass('active')) {
@@ -173,7 +172,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             }
         });
     };
-
+    
     
     $('ul[data-toggle=nav-tree]').each(function () {
         var $tree;
@@ -181,21 +180,24 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         $tree.navTree($tree.data());
     });
     
- 
-
-    var updateTree = function (ul, options) {
+    
+    
+    var updateTree = function (ul, options, parentId) {
         var idx = 0;
-        $(ul).removeClass('nav nav-pills nav-stacked nav-tree').addClass('nav nav-pills nav-stacked nav-tree');
+        
+        $(ul).removeClass('nav nav-pills nav-stacked nav-tree' + options.treeClasses).addClass('nav nav-pills nav-stacked nav-tree' + options.treeClasses);
         $(ul).children().each(function () {
             var $div = $(this).children('div');
             $div.attr('data-' + options.orderMember, idx);
-            updateTree($(this).children('ul').first(), options);
+            $div.attr('data-' + options.parentMember, parentId);
+            
+            updateTree($(this).children('ul').first(), options, $div.attr('data-' + options.idMember));
             idx++;
             if (options.createBadge) {
                 $div.attr('data-badge', $(this).children('ul').first().children().length);
                 appendBadge(this, options);
-                createOpener(this, options, 'opened');
             }
+            createOpener(this, options, 'opened');
 
         });
     };
@@ -217,44 +219,90 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             expandOnHover: 700,
             startCollapsed: false,
             relocate: function (e, e2) {
-                updateTree($(container).children('ul'), options);
+                updateTree($(container).children('ul'), options, 0);
             }
             
         });
     };
+    
+    var _getJsonTree = function (ul, options){    
+        var jsonTree = []
+        $(ul).children().each(function () {
+            var data = getData(this);
+            var id = data[_options.idMember];
+            jsonTree[id] = data;
+            jsonTree[id].children = _getJsonTree($(this).children('ul').first(), options);
+        });
+        return jsonTree;
 
-    $.fn.navTree = function (args) {        
-        var defaults = {
-            navTreeExpanded: 'fa fa-plus-square',
-            navTreeCollapsed: 'fa fa-minus-square',
-            orderMember: 'orden',
-            doubleTap: function (e, dataRow) { },
-            enableDragDrop: false,
-            source: null,
-            createBadge: false,
-        };
+    }
+    var _options = []
+    var methods = {
         
-        var options = $.extend(defaults, args);
-        
-        if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
-            throw new Error('Bootstrap Tree Nav drag and drop requires jquery-ui-nestedSortable plugin');
+        getJsonTree : function () {
+            var t = _getJsonTree($(this).children('ul'), _options)
+            return  t;
         }
+    }
+    
+    
+
+    $.fn.navTree = function (args) {
         
-        if ($(this).prop('tagName') === 'LI') {
-            collapsible(this, options);
-        } else if ($(this).prop('tagName') === 'UL') {
-            collapsible(this, options);
-        }
-        else if ($(this).prop('tagName') === 'DIV') {
-            jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">' + createTree(options.source, options) + '</ul>');
-            if (options.enableDragDrop) {
-                sortable(this,options);
-            }
-            collapsible(this, options);
-        }
         
-        setDoubleClick(options);
-	
+        
+        if (methods[args]) {
+            var defaults = $.fn.navTree.defaults;
+            var options = $.extend(defaults, _options);
+            _options = options;
+            var t = methods[ args ].apply(this, Array.prototype.slice.call(arguments, 1));
+            return t;
+            console.log(t);
+
+        } else if (typeof args === 'object' || !args) {
+            var defaults = $.fn.navTree.defaults;
+            var options = $.extend(defaults, args);
+            _options = options;
+
+            if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
+                throw new Error('Bootstrap Tree Nav drag and drop requires jquery-ui-nestedSortable plugin');
+            }      
+            return this.each(function () {
+                
+                if ($(this).prop('tagName') === 'LI') {
+                    collapsible(this, options);
+                } else if ($(this).prop('tagName') === 'UL') {
+                    collapsible(this, options);
+                }
+                else if ($(this).prop('tagName') === 'DIV') {
+                    jQuery(this).html('<ul class="nav nav-pills nav-stacked nav-tree ' + options.treeClasses + '" id="' + options.treeId + '" data-toggle="nav-tree">' + createTree(options.source, options) + '</ul>');
+                    if (options.enableDragDrop) {
+                        sortable(this, options);
+                    }
+                    collapsible(this, options);
+                }
+                
+                setDoubleClick(options);
+                //console.log(getJsonTree($(this).children('ul'), options));
+            });
+        }
     };
+    
+    $.fn.navTree.defaults = {
+        navTreeExpanded: 'fa fa-plus-square',
+        navTreeCollapsed: 'fa fa-minus-square',
+        orderMember: 'orden',
+        parentMember: 'par_id',
+        idMember : 'id',
+        nameMember : 'name',
+        doubleTap: function (e, dataRow) { },
+        enableDragDrop: false,
+        source: null,
+        treeId: 'myTree',
+        treeClasses: '',
+        createBadge: false,
+    };
+    
+   
     
 }(window.jQuery);

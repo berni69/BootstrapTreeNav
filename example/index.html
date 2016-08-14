@@ -74,7 +74,9 @@
             }
 
             var createTree = function () {
-                jQuery('#mnu').navTree({ source: dataSource[0], 'createBadge': true, doubleTap: doubleTap,enableDragDrop:true });
+                jQuery('#mnu').navTree({ source: dataSource[0], 'createBadge': true, doubleTap: doubleTap, enableDragDrop: true });
+                var xx = jQuery('#mnu').navTree('getJsonTree');
+                console.log(xx);
             }
             jQuery(document).ready(function () {
                 createTree();
