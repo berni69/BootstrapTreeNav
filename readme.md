@@ -157,13 +157,45 @@ jQuery(document).ready(function()
 
 
 
-Using the data API, you can also specify icons to display next to expanded and collapsed tree items:
+Using the data API, you can also specify the following icons:
+
+
 * `data-nav-tree-expanded="icon-collapse-alt"`: Use the Font Awesome icon `icon-collapse-alt` next to expanded items.
 * `data-nav-tree-collapsed="icon-expand-alt"`: Use the Font Awesome icon `icon-expand-alt` next to collapsed items.
 
-+ All members passed into json datasource will be inserted into the attribs to the div element. 
-+ **Name** and **orden** are mandatories.
-+ You can change the member name `orden` name with the option orderMember
+**OPTIONS**
+
+Passing options to the plugin you can also specify the following icons:
+* `navTreeExpanded`: Use the Font Awesome icon `fa fa-plus-square` next to expanded items.
+* `navTreeCollapsed`: Use the Font Awesome icon `fa fa-minus-square` next to expanded items.
+* `iconDeleteButton`: Use the Font Awesome icon `fa fa-trash-o fa-fw` next to expanded items.
+* `iconEditButton"`: Use the Font Awesome icon `fa fa-pencil-square-o` next to expanded items.
+
+The following options allows configure the datasource:
+
+* `source`: Array that contains data that will be displayed on the tree.  (`Default`=`null`)
+* `orderMember`: This field allows to specify in which order will be ordened the tree. (`Default`=`orden`)
+* `parentMember`: This field contains the parentId of current element. (`Default`=`par_id`)
+* `idMember`: This field contains the id of the current element. (`Default`=`id`)
+* `nameMember`: This field contains the text of the element. (`Default`=`name`)
+
+**Note: All members passed into json datasource will be inserted as attribs into the div element.**
+
+
+*Events*
+
+* `onClickEditButton`: This callback will be called if edit button is pressed. 
+* `onClickDeleteButton`: This callback will be called if delete button is pressed. 
+* `doubleTap`: This callback will be called if double click on a element is performed.
+
+*Render Options*
+* `createBadge`: This options add a badge to each element who has childs. (`Default`=`false`)
+* `showEditButton`: This option enable an edit button when mouse is hover an element. (`Default`=`false`)
+* `showDeleteButton`: This option enable a delete button when mouse is hover an element. (`Default`=`false`)
+* `enableDragDrop`: This option enable a sortable tree. Requires (jquery.mjs.nestedSortable.js) . (`Default`=`false`)
+* `treeClasses`: This classes will be appended to default tree-nav classes . (`Default`=``)
+* `treeId`: This option specify the id of the first ul element. (`Default`=`myTree`)
+
 
 Authors
 -------
