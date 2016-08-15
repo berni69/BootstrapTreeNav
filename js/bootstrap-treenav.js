@@ -27,6 +27,9 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 +function ($) {
     
     'use strict';
+    
+    var _options = [];
+   
     var getData = function (li) {
         var attrs = [];
         $(li).children('div').each(function () {
@@ -86,7 +89,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         }
         childHtml = childHtml + '</ul>';
         
-        return '<li  id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a></div>' + childHtml + '</li>';
+        return '<li  id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a><span class="buttons pull-right" /></div>' + childHtml + '</li>';
     };
     
     var expand = function (li) {
@@ -105,6 +108,19 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         if (options.createBadge && typeof $(li).children('div').attr('data-badge') !== 'undefined' && $(li).children('div').attr('data-badge') > 0) {
             $(li).children('div').append('<span class="badge pull-right">' + $(li).children('div').attr('data-badge') + '</span>');
         }
+    };
+    
+    var createButton = function (li, options, action) {
+        var $buttons = $(li).children('div').children('span.buttons');
+        $buttons.children('.' + action).remove();
+        if (options['show' + action + 'Button']) {
+            $buttons.append('<button class="btn btn-xs  btn-default ' + action + '" title="' + action + '"><i class="' + options['icon' + action + 'Button'] + '" aria-hidden="true"></i></button>');
+        }
+    };
+
+    var createButtons = function (li, options) {
+        createButton(li, options, 'Edit');        
+        createButton(li, options, 'Delete');
     };
     
     var createOpener = function (element, options, status) {
@@ -152,8 +168,9 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         $ul.removeClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses).addClass('nav nav-pills nav-stacked nav-tree' + options.treeClasses);
         $childrenLi.each(function (index, li) {
             collapsibleAll($(li), options);
+            createButtons(li, options);
             appendBadge(li, options);
-            
+
             // Expand the tree so that the active item is shown.
             if ($(li).hasClass('active')) {
                 $(li).parents('ul').each(function (i, ul) {
@@ -189,16 +206,15 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         $(ul).children().each(function () {
             var $div = $(this).children('div');
             $div.attr('data-' + options.orderMember, idx);
-            $div.attr('data-' + options.parentMember, parentId);
-            
+            $div.attr('data-' + options.parentMember, parentId);            
             updateTree($(this).children('ul').first(), options, $div.attr('data-' + options.idMember));
-            idx++;
-            if (options.createBadge) {
-                $div.attr('data-badge', $(this).children('ul').first().children().length);
-                appendBadge(this, options);
-            }
+            $div.attr('data-badge', $(this).children('ul').first().children().length);
+            /** UI OPTIONS **/
+            createButtons(this, options);
+            appendBadge(this, options);
             createOpener(this, options, 'opened');
 
+            idx++;
         });
     };
     var sortable = function (container, options) {
@@ -225,8 +241,8 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         });
     };
     
-    var _getJsonTree = function (ul, options){    
-        var jsonTree = []
+    var _getJsonTree = function (ul, options) {
+        var jsonTree = [];
         $(ul).children().each(function () {
             var data = getData(this);
             var id = data[_options.idMember];
@@ -235,33 +251,23 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         });
         return jsonTree;
 
-    }
-    var _options = []
+    };
     var methods = {
-        
         getJsonTree : function () {
-            var t = _getJsonTree($(this).children('ul'), _options)
-            return  t;
+            return _getJsonTree($(this).children('ul'), _options);
         }
-    }
-    
-    
-
+    };
+    //Main function of navTree plugin
     $.fn.navTree = function (args) {
-        
-        
-        
+        var defaults = $.fn.navTree.defaults;
+        var options = null;
         if (methods[args]) {
-            var defaults = $.fn.navTree.defaults;
-            var options = $.extend(defaults, _options);
+            
+            options = $.extend(defaults, _options);
             _options = options;
-            var t = methods[ args ].apply(this, Array.prototype.slice.call(arguments, 1));
-            return t;
-            console.log(t);
-
+            return methods[ args ].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof args === 'object' || !args) {
-            var defaults = $.fn.navTree.defaults;
-            var options = $.extend(defaults, args);
+            options = $.extend(defaults, args);
             _options = options;
 
             if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
@@ -283,7 +289,6 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
                 }
                 
                 setDoubleClick(options);
-                //console.log(getJsonTree($(this).children('ul'), options));
             });
         }
     };
@@ -291,18 +296,22 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
     $.fn.navTree.defaults = {
         navTreeExpanded: 'fa fa-plus-square',
         navTreeCollapsed: 'fa fa-minus-square',
+        iconDeleteButton: 'fa fa-trash-o fa-fw',
+        iconEditButton: 'fa fa-pencil-square-o',
         orderMember: 'orden',
         parentMember: 'par_id',
         idMember : 'id',
         nameMember : 'name',
+        showEditButton: false,
+        showDeleteButton: false,
+        onClickEditButton: function (e, dataRow) { },
+        onClickDeleteButton: function (e, dataRow) { },
         doubleTap: function (e, dataRow) { },
         enableDragDrop: false,
         source: null,
         treeId: 'myTree',
         treeClasses: '',
         createBadge: false,
-    };
-    
-   
+    };   
     
 }(window.jQuery);

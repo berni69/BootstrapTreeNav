@@ -10,11 +10,23 @@ ul.nav-tree {
         position: relative;
         margin-left: -15px;
 
+       div.contentElement {
+            &:hover {
+                background-color: #f7f7f9;
+                span.buttons {
+                    display: block;
+                }
+            }
+        }
+
         div.contentElement {
             a {
                 padding-left: 15px;
             }
 
+            span.buttons {
+                display: none;
+            }
 
             span.opener {
                 position: absolute;

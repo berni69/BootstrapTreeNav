@@ -4,6 +4,12 @@
 * Copyright 2013 Morris Singer by @morrissinger
 */
 
+/**
+* bootstrap-treenav.js v1.0.1 
+* Copyright 2016 Bernat Mut
+* Copyright 2013 Morris Singer by @morrissinger
+*/
+
 ul.nav-tree {
   list-style: none;
   margin-left: 20px;
@@ -15,8 +21,17 @@ ul.nav-tree li {
   position: relative;
   margin-left: -15px;
 }
+ul.nav-tree li div.contentElement:hover {
+  background-color: #f7f7f9;
+}
+ul.nav-tree li div.contentElement:hover span.buttons {
+  display: block;
+}
 ul.nav-tree li div.contentElement a {
   padding-left: 15px;
+}
+ul.nav-tree li div.contentElement span.buttons {
+  display: none;
 }
 ul.nav-tree li div.contentElement span.opener {
   position: absolute;
