@@ -12,7 +12,7 @@ module.exports = function (grunt) {
               '* <%= pkg.name %>.js v<%= pkg.version %> \n' +
               '* Copyright <%= grunt.template.today("yyyy") %> <%= pkg.contributors[0].name %>\n' +
               '* Copyright 2013 <%= pkg.author %> by @morrissinger\n' +
-             // '* <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
+              '* License: <%= pkg.license %>\n' +
                 '*/\n',
         // Task configuration.
         clean: {

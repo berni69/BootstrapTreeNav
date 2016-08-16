@@ -2,13 +2,10 @@
 * bootstrap-treenav.js v1.0.1 
 * Copyright 2016 Bernat Mut
 * Copyright 2013 Morris Singer by @morrissinger
+* Licensed: Apache-2.0
 */
 
-/**
-* bootstrap-treenav.js v1.0.1 by @morrissinger @berni69
-* Copyright 2013 Morris Singer
-* http://www.apache.org/licenses/LICENSE-2.0
-*/
+
 if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 
 /* ==========================================================
