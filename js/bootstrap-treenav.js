@@ -81,7 +81,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             child.forEach(function (obj) {
                 childHtml = childHtml + obj;
             });
-            attribs = attribs + 'data-badge="' + (child.length - 1) + '" ';
+            attribs = attribs + 'data-badge="' + (Object.keys(Node.children).length - 1) + '" ';
         }
         childHtml = childHtml + '</ul>';
         

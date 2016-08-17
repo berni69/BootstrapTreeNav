@@ -21,16 +21,22 @@ ul.nav-tree {
         }
 
         div.contentElement {
+
+			padding: 10px 15px;
+			
             a {
                 text-indent: 15px;
 				border-radius: 4px;
 				position: relative;
 				display: inline-block;
-				padding: 10px 15px;
             }
 
             span.buttons {
                 display: none;
+				margin-left: 2px;
+				button.btn{
+					margin-left: 1px;
+				}
             }
 
             span.opener {
