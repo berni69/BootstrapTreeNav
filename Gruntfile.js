@@ -36,7 +36,6 @@ module.exports = function (grunt) {
         
         concat: {
             options: {
-                // banner: '<%= banner %><%= jqueryCheck %>',
                 stripBanners: false
             },
             bootstraptreenav: {
@@ -49,7 +48,6 @@ module.exports = function (grunt) {
         
         uglify: {
             options: {
-       // banner: '<%= banner %>'
             },
             bootstraptreenav: {
                 src: ['<%= concat.bootstraptreenav.dest %>'],
@@ -68,7 +66,6 @@ module.exports = function (grunt) {
             src: {
                 options: {
                     style: 'expanded',
-       //   banner: '<%= banner %>'
                 },
                 files: {
                     'dist/css/bootstrap-treenav.css' : 'sass/bootstrap-treenav.scss'
@@ -77,7 +74,6 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     style: 'compressed',
-       //   banner: '<%= banner %>'
                 },
                 files: {
                     'dist/css/bootstrap-treenav.min.css' : 'sass/bootstrap-treenav.scss'
@@ -105,6 +101,17 @@ module.exports = function (grunt) {
             }
             
         },
+    // Mocha
+		mocha: {
+			  all: {
+				src: ['tests/testrunner.html'],
+			  },
+			  options: {
+				reporter: 'Spec',         /* [1] */
+				run: true                /* [2] */
+			}
+			}
+			
     });
     
     
@@ -116,9 +123,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-banner');
+	grunt.loadNpmTasks('grunt-mocha');
+	grunt.loadNpmTasks('grunt-banner');
     
-    var testSubtasks = ['dist-css', 'jshint'];
+    var testSubtasks = ['dist-css', 'jshint', 'mocha'];
     // Only push to coveralls under Travis
     if (process.env.TRAVIS) {
         if ((process.env.TRAVIS_REPO_SLUG === 'morrissinger/BootstrapTreeNav' && process.env.TRAVIS_PULL_REQUEST === 'false')) {
@@ -139,9 +147,13 @@ module.exports = function (grunt) {
     
     // Img distribution task.
     grunt.registerTask('dist-img', ['copy']);
+	
+	//Tests with mocha
+    grunt.registerTask('mocha', ['mocha']);
+
     
     // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner']);
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner','mocha']);
     
     // Default task.
     grunt.registerTask('default', ['test', 'dist']);

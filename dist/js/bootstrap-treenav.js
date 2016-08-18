@@ -2,11 +2,15 @@
 * bootstrap-treenav.js v1.0.1 
 * Copyright 2016 Bernat Mut
 * Copyright 2013 Morris Singer by @morrissinger
-* Licensed: Apache-2.0
+* License: Apache-2.0
 */
 
 
 if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
+if(typeof chai !== 'undefined'){
+	var navTreeTesting = function (){};
+	
+}	
 
 /* ==========================================================
  * bootstrap-treenav.js
@@ -88,7 +92,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
             child.forEach(function (obj) {
                 childHtml = childHtml + obj;
             });
-            attribs = attribs + 'data-badge="' + (child.length - 1) + '" ';
+            attribs = attribs + 'data-badge="' + (Object.keys(Node.children).length - 1) + '" ';
         }
         childHtml = childHtml + '</ul>';
         
@@ -200,7 +204,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         $tree.navTree($tree.data());
     });
     
-    
+   	
     
     var updateTree = function (ul, options, parentId) {
         var idx = 0;
@@ -317,4 +321,10 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         createBadge: false,
     };   
     
+	/** Only for testing purposes **/
+	if(typeof navTreeTesting !== 'undefined'){
+		navTreeTesting.getData = getData;
+	}	
+	
+	
 }(window.jQuery);

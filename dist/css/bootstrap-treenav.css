@@ -2,7 +2,7 @@
 * bootstrap-treenav.js v1.0.1 
 * Copyright 2016 Bernat Mut
 * Copyright 2013 Morris Singer by @morrissinger
-* Licensed: Apache-2.0
+* License: Apache-2.0
 */
 
 ul.nav-tree {
@@ -23,15 +23,21 @@ ul.nav-tree li div.contentElement:hover {
 ul.nav-tree li div.contentElement:hover span.buttons {
   display: block;
 }
+ul.nav-tree li div.contentElement {
+  padding: 10px 15px;
+}
 ul.nav-tree li div.contentElement a {
   text-indent: 15px;
   border-radius: 4px;
   position: relative;
   display: inline-block;
-  padding: 10px 15px;
 }
 ul.nav-tree li div.contentElement span.buttons {
   display: none;
+  margin-left: 2px;
+}
+ul.nav-tree li div.contentElement span.buttons button.btn {
+  margin-left: 1px;
 }
 ul.nav-tree li div.contentElement span.opener {
   position: absolute;

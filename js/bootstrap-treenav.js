@@ -1,5 +1,9 @@
 
 if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
+if(typeof chai !== 'undefined'){
+	var navTreeTesting = function (){};
+	
+}	
 
 /* ==========================================================
  * bootstrap-treenav.js
@@ -193,7 +197,7 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         $tree.navTree($tree.data());
     });
     
-    
+   	
     
     var updateTree = function (ul, options, parentId) {
         var idx = 0;
@@ -310,4 +314,10 @@ if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
         createBadge: false,
     };   
     
+	/** Only for testing purposes **/
+	if(typeof navTreeTesting !== 'undefined'){
+		navTreeTesting.getData = getData;
+	}	
+	
+	
 }(window.jQuery);
