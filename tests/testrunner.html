@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
@@ -18,24 +18,26 @@
   </script>
   <!-- elements of dom to play tests -->
   <div style="display:none">
-    <li id='getDataMultiplediv'>
-	  <div data-test='aaa' ></div>
-	  <div data-tset='bbb'></div>
-	  <div data-tets='ccc'></div>
-	  <div data-ttse='ddd'></div>
-    </li>
-	<li id='getDataElementdiv'>
-	  <div data-test='aaa' data-tset='bbb' ></div>
-    </li>
+      <ul>
+          <li id='getDataMultiplediv'>
+              <div data-test='aaa'></div>
+              <div data-tset='bbb'></div>
+              <div data-tets='ccc'></div>
+              <div data-ttse='ddd'></div>
+          </li>
+          <li id='getDataElementdiv'>
+              <div data-test='aaa' data-tset='bbb'></div>
+          </li>
+      </ul>
   </div>
   <!-- Tests -->
   <script src="tests.js"></script>
 
   <script>
     // Only tests run in real browser, injected script run if options.run == true
-  //  if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
       mocha.run();
-   // }
+    }
   </script>
 </body>
 </html>

@@ -106,7 +106,9 @@ module.exports = function (grunt) {
 			  all: {
 				src: ['tests/testrunner.html'],
 			  },
-			  options: {
+            options: {
+                timeout: 10000,
+                log: true,
 				reporter: 'Spec',         /* [1] */
 				run: true                /* [2] */
 			}
@@ -149,11 +151,11 @@ module.exports = function (grunt) {
     grunt.registerTask('dist-img', ['copy']);
 	
 	//Tests with mocha
-    grunt.registerTask('mocha', ['mocha']);
+    grunt.registerTask('testing', ['mocha']);
 
     
     // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner','mocha']);
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner','testing']);
     
     // Default task.
     grunt.registerTask('default', ['test', 'dist']);
