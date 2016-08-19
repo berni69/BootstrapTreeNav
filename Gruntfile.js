@@ -29,7 +29,9 @@ module.exports = function (grunt) {
             src: {
                 src: [
                     'js/lang/*/*.js',
-                    'js/*.js'
+					'js/*.js',
+					'tests/*.js',
+					'tests/libs/prototypes.js'
                 ]
             }
         },
