@@ -1,6 +1,6 @@
 BootstrapTreeNav
 ====================
-[http://berni69.github.io/BootstrapTreeNav](http://berni69.github.io/BootstrapTreeNav)
+[http://berni69.github.io/BootstrapTreeNav](http://berni69.github.io/BootstrapTreeNav) [![Build Status](https://travis-ci.org/berni69/BootstrapTreeNav.svg?branch=master)](https://travis-ci.org/berni69/BootstrapTreeNav)
 
 BootstrapTreeNav is a javascript plugin for [Twitter Bootstrap 3](http://getbootstrap.com/) to help you create tree navigation menus, created and maintained by [Morris Singer](http://morrissinger.com).
 
@@ -212,6 +212,7 @@ Copyright and license
 ---------------------
 
 Copyright 2013 Morris Singer
+
 Copyright 2016 Bernat Mut
 
 Licensed under the Apache License, Version 2.0 (the "License");

@@ -324,6 +324,7 @@ if(typeof chai !== 'undefined'){
 	/** Only for testing purposes **/
 	if(typeof navTreeTesting !== 'undefined'){
 		navTreeTesting.getData = getData;
+		navTreeTesting.createTree = createTree;
 	}	
 	
 	

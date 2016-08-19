@@ -1,44 +1,79 @@
 ﻿<html>
 <head>
-  <meta charset="utf-8">
-  <title>Mocha Tests</title>
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
 </head>
 <body>
-  <div id="mocha"></div>
-  <script src="../node_modules/mocha/mocha.js"></script>
-  <script src="../node_modules/chai/chai.js"></script>
-  <script src='libs/jquery.min.js'></script>
-  <script src='libs/prototypes.js'></script>
+    <div id="mocha"></div>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src='libs/jquery.min.js'></script>
+    <script src='libs/prototypes.js'></script>
 
-  <!-- add any JS files under test (or put them in different .html files) -->
-  <script src='../js/bootstrap-treenav.js'></script>
-  <script>
-    mocha.setup('bdd')
-    mocha.reporter('html');
-  </script>
-  <!-- elements of dom to play tests -->
-  <div style="display:none">
-      <ul>
-          <li id='getDataMultiplediv'>
-              <div data-test='aaa'></div>
-              <div data-tset='bbb'></div>
-              <div data-tets='ccc'></div>
-              <div data-ttse='ddd'></div>
-          </li>
-          <li id='getDataElementdiv'>
-              <div data-test='aaa' data-tset='bbb'></div>
-          </li>
-      </ul>
-  </div>
-  <!-- Tests -->
-  <script src="tests.js"></script>
+    <!-- add any JS files under test (or put them in different .html files) -->
+    <script src='../js/bootstrap-treenav.js'></script>
+    <script>
+        mocha.setup('bdd')
+        mocha.reporter('html');
+    </script>
+    <!-- elements of dom to play tests -->
+    <div style="display:none">
+        <ul>
+            <li id='getDataMultiplediv'>
+                <div data-test='aaa'></div>
+                <div data-tset='bbb'></div>
+                <div data-tets='ccc'></div>
+                <div data-ttse='ddd'></div>
+            </li>
+            <li id='getDataElementdiv'>
+                <div data-test='aaa' data-tset='bbb'></div>
+            </li>
+            <li id='getDataMultipleNumericdiv'>
+                <div data-123='aaa'></div>
+                <div data-234='bbb'></div>
+                <div data-345='ccc'></div>
+                <div data-456='ddd'></div>
+            </li>
 
-  <script>
-    // Only tests run in real browser, injected script run if options.run == true
-    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
-      mocha.run();
-    }
-  </script>
+            <li id='getDataNumericElementdiv'>
+                <div data-123='aaa' data-234='bbb' data-345='ccc' data-456='ddd'></div>
+            </li>
+
+            <li id='getDataStringNumericAttribsdiv'>
+                <div data-test='aaa' data-123='bbb' data-tets='ccc' data-234='ddd'></div>
+                <div data-ttes='aaa' data-345='bbb' data-ttse='ccc' data-456='ddd'></div>
+                <div data-test1='aaa' data-test2='bbb' data-123t='ccc' data-234t='ddd'></div>
+                <div data-000tes='aaa' data-111tes='bbb' data-222tes='ccc' data-333tes='ddd'></div>
+            </li>
+
+            <li id='getDataDataTestdiv'>
+                <div data-data-aaa='aaa' data-234='data-eee1' some-data-data='123-data-' notdata-data-456='q1w2e3r4'></div>
+            </li>
+
+            <li id='getDataRandomTest'>
+                <div data-='something' fakedata='data-aaa'></div>
+                <div a-data='<div data-attr="atr"></div>' data-='123' data------endattribute='---- nothing' data--=''></div>
+                <div data-attrib='12e3'></div>
+            </li>
+            <li id='getDataRandomTest2'>
+                <div data-#='something'></div>
+                <div data-data-data-='somet'></div>
+                <div data-data-data-data='smt'></div>
+                <div data-test='s'></div>
+                <div data-testing='testing' />
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tests -->
+    <script src="tests.js"></script>
+
+    <script>
+        // Only tests run in real browser, injected script run if options.run == true
+        if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+            mocha.run();
+        }
+    </script>
 </body>
 </html>

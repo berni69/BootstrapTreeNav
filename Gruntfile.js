@@ -130,10 +130,10 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-mocha');
 	grunt.loadNpmTasks('grunt-banner');
     
-    var testSubtasks = ['dist-css', 'jshint', 'mocha'];
+    var testSubtasks = ['dist-css', 'jshint', 'testing'];
     // Only push to coveralls under Travis
     if (process.env.TRAVIS) {
-        if ((process.env.TRAVIS_REPO_SLUG === 'morrissinger/BootstrapTreeNav' && process.env.TRAVIS_PULL_REQUEST === 'false')) {
+        if ((process.env.TRAVIS_REPO_SLUG === 'berni69/BootstrapTreeNav' && process.env.TRAVIS_PULL_REQUEST === 'false')) {
             testSubtasks.push('coveralls');
         }
     }
@@ -157,7 +157,7 @@ module.exports = function (grunt) {
 
     
     // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner','testing']);
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-img', 'dist-js', 'banner']);
     
     // Default task.
     grunt.registerTask('default', ['test', 'dist']);

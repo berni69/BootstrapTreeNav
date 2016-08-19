@@ -29,7 +29,11 @@ if(typeof chai !== 'undefined'){
     'use strict';
     
     var _options = [];
-   
+   /**
+    * function getData(arg)
+	* This function will return all attrib of div elements who's name starts with 'data-', example data-id,data-badge,...
+    * @param li: DOM element who has div children
+    */
     var getData = function (li) {
         var attrs = [];
         $(li).children('div').each(function () {
@@ -60,7 +64,14 @@ if(typeof chai !== 'undefined'){
             return false;
         });
     };
-    
+    /**
+     * Function createTree
+	 * It will return a tree from a an object who has the attrib children, it's recursive. 
+     * @param Node: Actual processing node
+     * @param options: Object options
+     * @param level: This expects the current deep
+	 *
+     */
     var createTree = function (Node, options, level) {
         
         var hasChildren = typeof Node.children !== 'undefined';
@@ -317,6 +328,7 @@ if(typeof chai !== 'undefined'){
 	/** Only for testing purposes **/
 	if(typeof navTreeTesting !== 'undefined'){
 		navTreeTesting.getData = getData;
+		navTreeTesting.createTree = createTree;
 	}	
 	
 	
