@@ -1,12 +1,4 @@
 
-//Funcion no soportada en PhantomJs
-if (!String.prototype.includes) {
-    String.prototype.includes = function () {
-        'use strict';
-        return String.prototype.indexOf.apply(this, arguments) !== -1;
-    };
-}
-
 describe('navTree', function () {
     describe('#GetData(): should return array of data- attribs inside a div childs', function () {
         it('Multiple div inside container', function () {

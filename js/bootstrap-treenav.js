@@ -33,8 +33,8 @@ if(typeof chai !== 'undefined'){
     var getData = function (li) {
         var attrs = [];
         $(li).children('div').each(function () {
-            $.each(this.attributes, function () {
-                if (this.specified && this.name.includes('data-')) {
+			$.each(this.attributes, function () {
+				if (this.specified && this.name.startsWith('data-') && this.name.replace('data-', '').length > 0) {
                     attrs[this.name.replace('data-', '')] = this.value;
                 }
             });

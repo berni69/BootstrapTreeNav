@@ -41,7 +41,7 @@ if(typeof chai !== 'undefined'){
         var attrs = [];
         $(li).children('div').each(function () {
             $.each(this.attributes, function () {
-                if (this.specified && this.name.includes('data-')) {
+				if (this.specified && this.name.startsWith('data-')) {
                     attrs[this.name.replace('data-', '')] = this.value;
                 }
             });
