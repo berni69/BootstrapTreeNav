@@ -1,17 +1,17 @@
-﻿language: node_js
-
+﻿sudo: false
+language: node_js
 node_js:
-  # Quote the version number as Travis will interpret 0.10 as 0.1 unless quoted.
   - "0.10"
-
+  - "0.12"
+  - "4"
+  - "5"
+  - "iojs"
 before_install:
-  # According to http://docs.travis-ci.com/user/build-configuration/
-  # prepare the system to install prerequisites or dependencies.
-  # Update the OS before installing prerequisites.
-  - sudo apt-get update
-  - sudo gem install
-
-install:
-  # Install dev dependencies for this Node.js project.
-  - npm install
-  - npm test
+  - if [ "$TRAVIS_NODE_VERSION" = "0.10" ]; then npm install -g npm@2; fi
+  - gem update --system
+  - gem install sass
+matrix:
+  fast_finish: true
+cache:
+  directories:
+- node_modules
