@@ -132,11 +132,11 @@ module.exports = function (grunt) {
     
     var testSubtasks = ['dist-css', 'jshint', 'testing'];
     // Only push to coveralls under Travis
-    if (process.env.TRAVIS) {
+    /*if (process.env.TRAVIS) {
         if ((process.env.TRAVIS_REPO_SLUG === 'berni69/BootstrapTreeNav' && process.env.TRAVIS_PULL_REQUEST === 'false')) {
             testSubtasks.push('coveralls');
         }
-    }
+    }*/
     grunt.registerTask('test', testSubtasks);
     
     
