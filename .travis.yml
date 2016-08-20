@@ -14,4 +14,4 @@ matrix:
   fast_finish: true
 cache:
   directories:
-- node_modules
+    - node_modules
