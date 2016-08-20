@@ -1,7 +1,17 @@
 ﻿language: node_js
-before_install: 
-  - "gem update --system"
-  - "gem install sass"
-  - "sudo apt-get -qq update"
-node_js: 
-  - "0.8"
+
+node_js:
+  # Quote the version number as Travis will interpret 0.10 as 0.1 unless quoted.
+  - "0.10"
+
+before_install:
+  # According to http://docs.travis-ci.com/user/build-configuration/
+  # prepare the system to install prerequisites or dependencies.
+  # Update the OS before installing prerequisites.
+  - sudo apt-get update
+  - sudo gem install
+
+install:
+  # Install dev dependencies for this Node.js project.
+  - npm install
+  - npm test
