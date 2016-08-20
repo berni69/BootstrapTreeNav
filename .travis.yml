@@ -3,3 +3,5 @@ node_js:
   - "6.4.0"
 before_script:
   - npm install grunt-cli -g
+before_install:
+  - gem install sass
