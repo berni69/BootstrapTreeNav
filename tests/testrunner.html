@@ -1,13 +1,18 @@
 ﻿<html>
 <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <title>Mocha Tests</title>
-    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <link rel='stylesheet' href='../node_modules/mocha/mocha.css' />
+    <style>
+        .displayNone{
+            display:none;
+        }
+    </style>
 </head>
 <body>
-    <div id="mocha"></div>
-    <script src="../node_modules/mocha/mocha.js"></script>
-    <script src="../node_modules/chai/chai.js"></script>
+    <div id='mocha'></div>
+    <script src='../node_modules/mocha/mocha.js'></script>
+    <script src='../node_modules/chai/chai.js'></script>
     <script src='libs/jquery.min.js'></script>
     <script src='libs/prototypes.js'></script>
 
@@ -18,7 +23,7 @@
         mocha.reporter('html');
     </script>
     <!-- elements of dom to play tests -->
-    <div style="display:none">
+    <div class="displayNone">
         <ul>
             <li id='getDataMultiplediv'>
                 <div data-test='aaa'></div>
@@ -53,7 +58,7 @@
 
             <li id='getDataRandomTest'>
                 <div data-='something' fakedata='data-aaa'></div>
-                <div a-data='<div data-attr="atr"></div>' data-='123' data------endattribute='---- nothing' data--=''></div>
+                <div a-data="<div data-attr='atr'></div>" data-='123' data------endattribute='---- nothing' data--=''></div>
                 <div data-attrib='12e3'></div>
             </li>
             <li id='getDataRandomTest2'>
@@ -66,14 +71,144 @@
         </ul>
     </div>
 
-    <!-- Tests -->
-    <script src="tests.js"></script>
+    <div class="displayNone">
+        <ul id='createTreeResponse'></ul>
 
-    <script>
-        // Only tests run in real browser, injected script run if options.run == true
-        if (navigator.userAgent.indexOf('PhantomJS') < 0) {
-            mocha.run();
-        }
-    </script>
+        <ul id='createTreeTest1'>
+            <li id='li_li_root'>
+                <div class='contentElement' data-id='li_root' data-name='Root' data-orden='2' data-badge='1'><a href='#' id='url_li_root'>Root</a><span class='buttons pull-right' /></div>
+                <ul>
+                    <li id='li_11'>
+                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='0' data-orden='1'><a href='#' id='url_11'>First Child</a><span class='buttons pull-right' /></div>
+                        <ul></ul>
+                    </li>
+                    <li id='li_12'>
+                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='2'><a href='#' id='url_12'>Second Child</a><span class='buttons pull-right' /></div>
+                        <ul></ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul id='createTreeTest2'>
+            <li id='li_raiz'>
+                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0' data-badge='1'>
+                    <a href='#' id='url_raiz'>Root</a>
+                    <span class='buttons pull-right'></span>
+                </div>
+                <ul>
+                    <li id='li_11'>
+                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='0' data-orden='0'>
+                            <a href='#' id='url_11'>First Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul></ul>
+                    </li>
+                    <li id='li_12'>
+                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1' data-badge='1'>
+                            <a href='#' id='url_12'>Second Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul>
+                            <li id='li_121'>
+                                <div class='contentElement' data-id='121' data-name='First Second Child' data-id_par='0' data-orden='0'><a href='#' id='url_121'>First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            </li>
+                            <li id='li_122'>
+                                <div class='contentElement' data-id='122' data-name='Second Second Child' data-orden='1'><a href='#' id='url_122'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul id='createTreeTest3'>
+            <li id='li_raiz'>
+                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0' data-badge='1'>
+                    <a href='#' id='url_raiz'>Root</a>
+                    <span class='buttons pull-right'></span>
+                </div>
+                <ul>
+                    <li id='li_11'>
+                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='-465465' data-orden='0'>
+                            <a href='#' id='url_11'>First Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul></ul>
+                    </li>
+                    <li id='li_12'>
+                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1' data-badge='1'>
+                            <a href='#' id='url_12'>Second Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul>
+                            <li id='li_121'>
+                                <div class='contentElement' data-id='121' data-name='First Second Child' data-id_par='-1' data-orden='0'><a href='#' id='url_121'>First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
+        <ul id='createTreeTest4'>
+            <li id='li_raiz'>
+                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0'>
+                    <a href='#' id='url_raiz'>Root</a>
+                    <span class='buttons pull-right'></span>
+                </div>
+                <ul>
+                    <li id='li_11'>
+                        <div class='contentElement' data-id='11' data-name='First Child' data-orden='0'>
+                            <a href='#' id='url_11'>First Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul>
+                            <li id='li_111'>
+                                <div class='contentElement' data-id='111' data-name='First First Child' data-orden='0'>
+                                    <a href='#' id='url_111'>First First Child</a>
+                                    <span class='buttons pull-right'></span>
+                                </div>
+                                <ul>
+                                    <li id='li_1111'>
+                                        <div class='contentElement' data-id='1111' data-name='First First First Child' data-orden='0'><a href='#' id='url_1111'>First First First Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                                    </li>
+                                    <li id='li_1112'>
+                                        <div class='contentElement' data-id='1112' data-name='First First Second Child' data-orden='0'><a href='#' id='url_1112'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id='li_12'>
+                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1'>
+                            <a href='#' id='url_12'>Second Child</a>
+                            <span class='buttons pull-right'></span>
+                        </div>
+                        <ul>
+                            <li id='li_121'>
+                                <div class='contentElement' data-id='121' data-name='Second First Child' data-id_par='1' data-orden='0'><a href='#' id='url_121'>Second First Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            </li>
+                            <li id='li_122'>
+                                <div class='contentElement' data-id='122' data-name='Second Second Child' data-orden='0'><a href='#' id='url_121'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
+    </div>
+            <!-- Tests -->
+            <script src='tests.js'></script>
+
+            <script>
+                // Only tests run in real browser, injected script run if options.run == true
+                if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+                    mocha.run();
+                }
+            </script>
 </body>
 </html>

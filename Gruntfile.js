@@ -114,7 +114,24 @@ module.exports = function (grunt) {
 				reporter: 'Spec',         /* [1] */
 				run: true                /* [2] */
 			}
-			}
+        },
+        htmlhintplus: {
+            options: {
+                htmlhintrc: 'js/.htmlhintrc',
+                //Como no es  crucial el estilo del test ni el ejemplo, no rompera la compilacion si hay algun error en el html.
+                force: true,
+                newer: true
+            },
+            build: {
+                options: {
+                    force: false
+                },
+                src: [
+                    'example/*.html',
+                    'tests/*.html'
+                ]
+            }
+        }
 			
     });
     
@@ -129,8 +146,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-mocha');
 	grunt.loadNpmTasks('grunt-banner');
+    grunt.loadNpmTasks('grunt-htmlhint-plus');
     
-    var testSubtasks = ['dist-css', 'jshint', 'testing'];
+
+    var testSubtasks = ['dist-css', 'jshint', 'testing', 'htmlhintplus' ];
     // Only push to coveralls under Travis
     /*if (process.env.TRAVIS) {
         if ((process.env.TRAVIS_REPO_SLUG === 'berni69/BootstrapTreeNav' && process.env.TRAVIS_PULL_REQUEST === 'false')) {

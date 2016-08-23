@@ -20,7 +20,6 @@
     <Compile Include="tests\libs\bootstrap.min.js" />
     <Compile Include="tests\libs\prototypes.js" />
     <Compile Include="tests\libs\jquery.min.js" />
-    <Compile Include="tests\qunit\GetData.js" />
     <Compile Include="tests\tests.js" />
     <Content Include=".travis.yml" />
     <Content Include="js\.jshintrc" />
@@ -45,7 +44,6 @@
     <Folder Include="sass" />
     <Folder Include="tests\" />
     <Folder Include="tests\libs\" />
-    <Folder Include="tests\qunit\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
