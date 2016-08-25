@@ -119,17 +119,25 @@ if(typeof chai !== 'undefined'){
         }
     };
     
-    var createButton = function (li, options, action) {
+    var createButton = function (li, options, action,callback) {
         var $buttons = $(li).children('div').children('span.buttons');
         $buttons.children('.' + action).remove();
         if (options['show' + action + 'Button']) {
             $buttons.append('<button class="btn btn-xs  btn-default ' + action + '" title="' + action + '"><i class="' + options['icon' + action + 'Button'] + '" aria-hidden="true"></i></button>');
+            if(typeof callback === "function" ){
+                $('button.' + action).off('click').on('click', function (e) {
+
+                    var data = getData($(this).parents('li').first());
+                    callback(e, data);
+                    
+                });
+            }            
         }
     };
 
     var createButtons = function (li, options) {
-        createButton(li, options, 'Edit');        
-        createButton(li, options, 'Delete');
+        createButton(li, options, 'Edit', options.onClickEditButton);        
+        createButton(li, options, 'Delete', options.onClickDeleteButton);
     };
     
     var createOpener = function (element, options, status) {

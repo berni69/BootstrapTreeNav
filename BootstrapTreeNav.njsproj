@@ -16,7 +16,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Compile Include="example\jquery.mjs.nestedSortable.js" />
     <Compile Include="tests\libs\bootstrap.min.js" />
     <Compile Include="tests\libs\prototypes.js" />
     <Compile Include="tests\libs\jquery.min.js" />
