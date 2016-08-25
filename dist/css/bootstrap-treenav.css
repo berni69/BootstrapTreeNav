@@ -1,3 +1,10 @@
+/**
+* bootstrap-treenav.js v1.0.1 
+* Copyright 2016 Bernat Mut
+* Copyright 2013 Morris Singer by @morrissinger
+* License: Apache-2.0
+*/
+
 ul.nav-tree {
   list-style: none;
   margin-left: 20px;
