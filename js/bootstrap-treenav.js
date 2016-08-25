@@ -124,7 +124,7 @@ if(typeof chai !== 'undefined'){
         $buttons.children('.' + action).remove();
         if (options['show' + action + 'Button']) {
             $buttons.append('<button class="btn btn-xs  btn-default ' + action + '" title="' + action + '"><i class="' + options['icon' + action + 'Button'] + '" aria-hidden="true"></i></button>');
-            if(typeof callback === "function" ){
+            if(typeof callback === 'function' ){
                 $('button.' + action).off('click').on('click', function (e) {
 
                     var data = getData($(this).parents('li').first());
