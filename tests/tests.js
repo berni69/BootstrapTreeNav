@@ -1,11 +1,58 @@
-// recorre todo el árbol desde la raíz comprobando que todos los TAGs y Atributos coincidan con lo esperado
-var traverseTree = function (responseNode, expectedNode) {
-    'use strict';
+// funcion endsWith
+String.prototype.endsWith = function (suffix) {
+	'use strict';
+	return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+// funciones auxiliares de traverseTree
+var existsInNodeList = function (Node, List, sortable, tagName) {
+	'use strict';
+	for (var i = 0, len = List.length; i < len; i++) {
+		var item = List.item(i);
+		if ((Node.name === item.name) && (Node.value === item.value)) {
+			return true;
+		} else {
+			if (sortable && (item.name === 'class')) {
+				if (tagName === 'DIV') {
+					if (item.value.endsWith('ui-sortable-handle')) {
+						return true;
+					}
+				} else if (tagName === 'UL') {
+					if (item.value.endsWith('ui-sortable')) {
+						return true;
+					}
+				} else if (tagName === 'LI') {
+					if (item.value.endsWith('mjs-nestedSortable-branch mjs-nestedSortable-expanded')) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	console.log('ERROR: En ' + tagName + ' -> el atributo ' + Node.name + ' no coincide');
+	return false;
+};
+var checkAttributeList = function (attrNode1, attrNode2, sortable, tagName) {
+	'use strict';
+	for (var i = 0, len = attrNode1.length; i < len; i++) {
+		if (!existsInNodeList(attrNode1.item(i), attrNode2, sortable, tagName)) {
+			return false;
+		}
+	}
+	return true;
+};
+
+// Con sortable === false ->
+//		recorre todo el arbol desde la raiz comprobando que todos los TAGs y Atributos coincidan con lo esperado
+// Con sortable === true ->
+//		recorre el arbol desde la raiz, comprobando que la única diferencia entre los dos
+//		parámetros es el atributo añadido por la funcion sortable
+var traverseTree = function (responseNode, expectedNode, sortable) {
+	'use strict';
     var children1 = responseNode.children;
     var children2 = expectedNode.children;
-    if (children1.length !== children2.length) {
-        console.log('tag: ' + responseNode.tagName + ' -> children length not equal, response has ' + (children1.length - children2.length) + ' node(s) more than expected (minimum)');
-        return false;
+	if (children1.length !== children2.length) {
+		console.log('tag: ' + responseNode.tagName + ' -> children length not equal, response has ' + (children1.length - children2.length) + ' node(s) more than expected (minimum)');
+		return false;
     }
     for (var i = 0, len = children1.length; i < len; i++) {
         var ch1 = children1[i];
@@ -15,25 +62,38 @@ var traverseTree = function (responseNode, expectedNode) {
         }
         // check attr
         var chAtt1 = ch1.attributes;
-        var chAtt2 = ch2.attributes;
-        if (chAtt1.length !== chAtt2.length) {
-            console.log('tag: ' + ch1.tagName + ' -> attr length not equal, response has ' + (chAtt1.length - chAtt2.length) + ' attr(s) more than expected (minimum)');
-            return false;
-        }
-        if (chAtt1.length !== 0) {
-            for (var j = 0, lenn = chAtt1.length; j < lenn; j++) {
-                if (chAtt1[j].name !== chAtt2[j].name) {
-                    console.log('ERROR: ' + chAtt1[j].name + ' no es ' + chAtt2[j].name);
-                    return false;
-                }
-                else if (chAtt1[j].value !== chAtt2[j].value) {
-                    console.log('ERROR value of ' + chAtt1[j].name + ': ' + chAtt1[j].value + ' no es ' + chAtt2[j].value);
-                    return false;
-                }
-            }
-        }
+		var chAtt2 = ch2.attributes;
+		if (chAtt1.length !== chAtt2.length) {
+			if (!((sortable && (chAtt1.length + 1 === chAtt2.length) && (ch1.tagName === 'LI')) ||
+				(sortable && (ch1.tagName === 'UL') && ((chAtt1.length === 1) && (chAtt2.length === 2))))) {
+				console.log('tag: ' + ch1.tagName + ' sortable===' + sortable + ' -> attr length not equal, response has ' + (chAtt1.length - chAtt2.length) + ' attr(s) more than expected (minimum)');
+				return false;
+			}
+		} else {
+			if (sortable) {
+				if (((ch1.tagName === 'UL') && (chAtt1.length !== 0)) || (ch1.tagName === 'LI')) {
+					console.log('Error Sortable Test: attribute number mismatch');
+					return false;
+				}
+			}
+		}
+		if (chAtt1.length !== 0) {
+			if (!checkAttributeList(chAtt1, chAtt2, sortable, ch1.tagName)) {
+				return false;
+			}
+		}
+		// check text
+		var str1 = ch1.textContent.replace(/\n|\r/g, '').replace(/ /g, '');
+		var str2 = ch2.textContent.replace(/\n|\r/g, '').replace(/ /g, '');
+		if (str1 !== str2) {
+			console.log('tag: ' + ch1.tagName + ' -> text mismatch:');
+			console.log('"' + str1 + '"');
+			console.log('instead of');
+			console.log('"' + str2 + '"');
+			return false;
+		}
         // go down
-        if (traverseTree(ch1, ch2) === false) {
+        if (traverseTree(ch1, ch2, sortable) === false) {
             return false;
         }
     }
@@ -41,7 +101,7 @@ var traverseTree = function (responseNode, expectedNode) {
 };
 
 describe('navTree', function () {
-    'use strict';
+	'use strict';
     describe('#GetData(): should return array of data- attribs inside a div childs', function () {
         it('Multiple div inside container', function () {
             var actual_obj = navTreeTesting.getData($('#getDataMultiplediv'));
@@ -120,21 +180,21 @@ describe('navTree', function () {
             var options = $.fn.navTree.defaults;
             var dataSource = [
                 {
-                    'id': 'li_root',
+                    'id': 'test1_root',
                     'name': 'Root',
                     'id_par': null,
-                    'orden': '2',
+                    'orden': '1',
                     'children': {
-                        '11': {
-                            'id': '11',
+                        'test1_11': {
+							'id': 'test1_11',
                             'name': 'First Child',
-                            'id_par': '0',
+							'id_par': 'test1_root',
                             'orden': '1',
                         },
-                        '12': {
-                            'id': '12',
+                        'test1_12': {
+							'id': 'test1_12',
                             'name': 'Second Child',
-                            'id_par': null,
+							'id_par': 'test1_root',
                             'orden': '2',
                         }
                     }
@@ -142,45 +202,45 @@ describe('navTree', function () {
             ];
             
             var ht = navTreeTesting.createTree(dataSource[0], options);
-            document.getElementById('createTreeResponse').innerHTML = ht;
-            var ResponseNode = document.getElementById('createTreeResponse');
+            document.getElementById('createTreeResponse1').innerHTML = ht;
+            var ResponseNode = document.getElementById('createTreeResponse1');
             
             var ExpectedNode = document.getElementById('createTreeTest1');
             
-            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0]), true, 'Create Tree 1 Failed');
-        });
+            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0], false), true, 'Create Tree 1 Failed');
+		});
         it('Create Tree test 2, more children', function () {
             var options = $.fn.navTree.defaults;
             var dataSource = [
                 {
-                    'id': 'raiz',
+					'id': 'test2_raiz',
                     'name': 'Root',
                     'id_par': null,
-                    'orden': '0',
+                    'orden': '1',
                     'children': {
-                        '11': {
-                            'id': '11',
+                        'test2_11': {
+							'id': 'test2_11',
                             'name': 'First Child',
-                            'id_par': '0',
-                            'orden': '0',
-                        },
-                        '12': {
-                            'id': '12',
-                            'name': 'Second Child',
-                            'id_par': null,
+							'id_par': 'test2_raiz',
                             'orden': '1',
+                        },
+                        'test2_12': {
+							'id': 'test2_12',
+                            'name': 'Second Child',
+							'id_par': 'test2_raiz',
+                            'orden': '2',
                             'children': {
-                                '121': {
-                                    'id': '121',
+                                'test2_121': {
+									'id': 'test2_121',
                                     'name': 'First Second Child',
-                                    'id_par': '0',
-                                    'orden': '0',
-                                },
-                                '122': {
-                                    'id': '122',
-                                    'name': 'Second Second Child',
-                                    'id_par': null,
+									'id_par': 'test2_12',
                                     'orden': '1',
+                                },
+                                'test2_122': {
+									'id': 'test2_122',
+                                    'name': 'Second Second Child',
+									'id_par': 'test2_12',
+                                    'orden': '2',
                                 }
                             }
                         }
@@ -189,113 +249,69 @@ describe('navTree', function () {
             ];
             
             var ht = navTreeTesting.createTree(dataSource[0], options);
-            document.getElementById('createTreeResponse').innerHTML = ht;
-            var ResponseNode = document.getElementById('createTreeResponse');
+            document.getElementById('createTreeResponse2').innerHTML = ht;
+            var ResponseNode = document.getElementById('createTreeResponse2');
             
             var ExpectedNode = document.getElementById('createTreeTest2');
-            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0]), true, 'Create Tree 2 Failed');
-        });
-        it('Create Tree test 3, negative values for "orden" and "id_par"', function () {
-            var options = $.fn.navTree.defaults;
-            var dataSource = [
-                {
-                    'id': 'raiz',
-                    'name': 'Root',
-                    'id_par': null,
-                    'orden': '0',
-                    'children': {
-                        '11': {
-                            'id': '11',
-                            'name': 'First Child',
-                            'id_par': '-465465',
-                            'orden': '0',
-                        },
-                        '12': {
-                            'id': '12',
-                            'name': 'Second Child',
-                            'id_par': null,
-                            'orden': '1',
-                            'children': {
-                                '121': {
-                                    'id': '121',
-                                    'name': 'First Second Child',
-                                    'id_par': '-1',
-                                    'orden': '0',
-                                },
-                                '122': {
-                                    'id': '122',
-                                    'name': 'Second Second Child',
-                                    'id_par': '-200',
-                                    'orden': '-1',
-                                }
-                            }
-                        }
-                    }
-                },
-            ];
-            
-            var ht = navTreeTesting.createTree(dataSource[0], options);
-            document.getElementById('createTreeResponse').innerHTML = ht;
-            
-            var ResponseNode = document.getElementById('createTreeResponse');
-            var ExpectedNode = document.getElementById('createTreeTest3');
-            
-            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0]), true, 'Create Tree 3 Failed');
-        });
-        
-        
+            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0], false), true, 'Create Tree 2 Failed');
+		});
+
+
+
         it('Create Tree test 4, children test in random positions', function () {
             var options = $.fn.navTree.defaults;
             var dataSource = [
                 {
-                    'id': 'raiz',
+					'id': 'test4_raiz',
                     'name': 'Root',
                     'id_par': null,
-                    'orden': '0',
+                    'orden': '1',
                     'children': {
-                        '11': {
-                            'id': '11',
+                        'test4_11': {
+							'id': 'test4_11',
                             'name': 'First Child',
-                            'id_par': null,
-                            'orden': '0',
-                            '112': {
-                                'id': '112',
-                                'name': 'First First Child',
-                                'id_par': null,
-                                'orden': '0',
-                                'children': {
-                                    '1111': {
-                                        'id': '1111',
-                                        'name': 'First First First Child',
-                                        'id_par': null,
-                                        'orden': '0',
-                                    },
-                                    '1112': {
-                                        'id': '1112',
-                                        'name': 'First First Second Child',
-                                        'id_par': null,
-                                        'orden': '1',
-                                    }
-                                }
-                            }
+							'id_par': 'test4_raiz',
+							'orden': '1',
+							'children': {
+								'test4_111': {
+									'id': 'test4_111',
+									'name': 'First First Child',
+									'id_par': 'test4_11',
+									'orden': '1',
+									'children': {
+										'test4_1111': {
+											'id': 'test4_1111',
+											'name': 'First First First Child',
+											'id_par': 'test4_111',
+											'orden': '1',
+										},
+										'test4_1112': {
+											'id': 'test4_1112',
+											'name': 'First First Second Child',
+											'id_par': 'test4_111',
+											'orden': '2',
+										}
+									}
+								}
+							}
                         },
-                        '12': {
-                            'id': '12',
+                        'test4_12': {
+							'id': 'test4_12',
                             'name': 'Second Child',
-                            'id_par': null,
-                            'orden': '1',
+							'id_par': 'test4_raiz',
+                            'orden': '2',
                             'children': {
-                                '121': {
-                                    'id': '121',
+                                'test4_121': {
+									'id': 'test4_121',
                                     'name': 'Second First Child',
-                                    'id_par': null,
-                                    'orden': '0',
-                                },
-                                '122': {
-                                    'id': '122',
-                                    'name': 'Second Second Child',
-                                    'id_par': null,
+									'id_par': 'test4_12',
                                     'orden': '1',
+                                },
+                                'test4_122': {
+									'id': 'test4_122',
+                                    'name': 'Second Second Child',
+									'id_par': 'test4_12',
+                                    'orden': '2',
                                 }
                             }
                         }
@@ -304,16 +320,61 @@ describe('navTree', function () {
             ];
             
             var ht = navTreeTesting.createTree(dataSource[0], options);
-            document.getElementById('createTreeResponse').innerHTML = ht;
-            var ResponseNode = document.getElementById('createTreeResponse');
+            document.getElementById('createTreeResponse4').innerHTML = ht;
+            var ResponseNode = document.getElementById('createTreeResponse4');
             
             var ExpectedNode = document.getElementById('createTreeTest4');
             
-            //Pending ->
-            chai.assert.deepEqual(true/*traverseTree(ResponseNode.children[0], ExpectedNode.children[0])*/, true, 'Create Tree 4 Failed');
+            chai.assert.deepEqual(traverseTree(ResponseNode.children[0], ExpectedNode.children[0], false), true, 'Create Tree 4 Failed');
         });
+	});
+	describe('#sortable()', function () {
 
-    });
+		it('Sortable Test 1', function () {
+			var options = $.fn.navTree.defaults;
+			var original = document.getElementById('test1_container_original');
+			var container = document.getElementById('test1_container_original2'); //div con ul
+			var sort = navTreeTesting.sortable($(container), options);
+			chai.assert.deepEqual(traverseTree(original, container, true), true, true, 'Error Sortable Test 1');
+		});
+		it('Sortable Test 2, testing createTree + Sortable', function () {
+			var options = $.fn.navTree.defaults;
+			var dataSource = [
+				{
+					'id': 'test1_root',
+					'name': 'Root',
+					'id_par': null,
+					'orden': '1',
+					'children': {
+						'test1_11': {
+							'id': 'test1_11',
+							'name': 'First Child',
+							'id_par': 'test1_root',
+							'orden': '1',
+						},
+						'test1_12': {
+							'id': 'test1_12',
+							'name': 'Second Child',
+							'id_par': 'test1_root',
+							'orden': '2',
+						}
+					}
+				},
+			];
+			var ht = navTreeTesting.createTree(dataSource[0], options);
+			document.getElementById('test2_original').innerHTML = ht;
+			document.getElementById('test2_sortable').innerHTML = ht;
+			var OriginalNode = document.getElementById('test2_container_original');
 
+			var SortableNode = document.getElementById('test2_container_sortable');
+			var sort = navTreeTesting.sortable($(SortableNode), options);
+			
+			var typ = document.createAttribute('id');
+			typ.value = 'test2_sortable';
+			document.getElementById('test2_original').attributes.setNamedItem(typ);
+			chai.assert.deepEqual(traverseTree(OriginalNode, SortableNode, true), true, true, 'Error Sortable Test 2');
+		});
+
+	});
 });
 

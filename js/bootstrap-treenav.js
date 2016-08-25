@@ -1,10 +1,8 @@
-
 if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
 if(typeof chai !== 'undefined'){
 	var navTreeTesting = function (){};
 	
 }	
-
 /* ==========================================================
  * bootstrap-treenav.js
  * https://github.com/morrissinger/BootstrapTreeNav
@@ -329,6 +327,7 @@ if(typeof chai !== 'undefined'){
 	if(typeof navTreeTesting !== 'undefined'){
 		navTreeTesting.getData = getData;
 		navTreeTesting.createTree = createTree;
+		navTreeTesting.sortable = sortable;
 	}	
 	
 	

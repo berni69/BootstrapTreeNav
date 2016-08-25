@@ -15,6 +15,8 @@
     <script src='../node_modules/chai/chai.js'></script>
     <script src='libs/jquery.min.js'></script>
     <script src='libs/prototypes.js'></script>
+    <script src='libs/jquery-ui-1.12.0/jquery-ui.min.js'></script>
+    <script src='libs/jquery.mjs.nestedSortable.js'></script>
 
     <!-- add any JS files under test (or put them in different .html files) -->
     <script src='../js/bootstrap-treenav.js'></script>
@@ -72,126 +74,135 @@
     </div>
 
     <div class="displayNone">
-        <ul id='createTreeResponse'></ul>
-
+        <ul id='createTreeResponse1'></ul>
+        <ul id='createTreeResponse2'></ul>
+        <ul id='createTreeResponse3'></ul>
+        <ul id='createTreeResponse4'></ul>
         <ul id='createTreeTest1'>
-            <li id='li_li_root'>
-                <div class='contentElement' data-id='li_root' data-name='Root' data-orden='2' data-badge='1'><a href='#' id='url_li_root'>Root</a><span class='buttons pull-right' /></div>
+            <li id='li_test1_root'>
+                <div class='contentElement' data-id='test1_root' data-name='Root' data-orden='1' data-badge='1'><a href='#' id='url_test1_root'>Root</a><span class='buttons pull-right' /></div>
                 <ul>
-                    <li id='li_11'>
-                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='0' data-orden='1'><a href='#' id='url_11'>First Child</a><span class='buttons pull-right' /></div>
+                    <li id='li_test1_11'>
+                        <div class='contentElement' data-id='test1_11' data-name='First Child' data-id_par='test1_root' data-orden='1'><a href='#' id='url_test1_11'>First Child</a><span class='buttons pull-right' /></div>
                         <ul></ul>
                     </li>
-                    <li id='li_12'>
-                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='2'><a href='#' id='url_12'>Second Child</a><span class='buttons pull-right' /></div>
+                    <li id='li_test1_12'>
+                        <div class='contentElement' data-id='test1_12' data-name='Second Child' data-id_par='test1_root' data-orden='2'><a href='#' id='url_test1_12'>Second Child</a><span class='buttons pull-right' /></div>
                         <ul></ul>
                     </li>
                 </ul>
             </li>
         </ul>
-
         <ul id='createTreeTest2'>
-            <li id='li_raiz'>
-                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0' data-badge='1'>
-                    <a href='#' id='url_raiz'>Root</a>
+            <li id='li_test2_raiz'>
+                <div class='contentElement' data-id='test2_raiz' data-name='Root' data-orden='1' data-badge='1'>
+                    <a href='#' id='url_test2_raiz'>Root</a>
                     <span class='buttons pull-right'></span>
                 </div>
                 <ul>
-                    <li id='li_11'>
-                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='0' data-orden='0'>
-                            <a href='#' id='url_11'>First Child</a>
+                    <li id='li_test2_11'>
+                        <div class='contentElement' data-id='test2_11' data-name='First Child' data-id_par='test2_raiz' data-orden='1'>
+                            <a href='#' id='url_test2_11'>First Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul></ul>
                     </li>
-                    <li id='li_12'>
-                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1' data-badge='1'>
-                            <a href='#' id='url_12'>Second Child</a>
+                    <li id='li_test2_12'>
+                        <div class='contentElement' data-id='test2_12' data-name='Second Child' data-orden='2' data-badge='1' data-id_par='test2_raiz'>
+                            <a href='#' id='url_test2_12'>Second Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul>
-                            <li id='li_121'>
-                                <div class='contentElement' data-id='121' data-name='First Second Child' data-id_par='0' data-orden='0'><a href='#' id='url_121'>First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            <li id='li_test2_121'>
+                                <div class='contentElement' data-id='test2_121' data-name='First Second Child' data-id_par='test2_12' data-orden='1'><a href='#' id='url_test2_121'>First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
                             </li>
-                            <li id='li_122'>
-                                <div class='contentElement' data-id='122' data-name='Second Second Child' data-orden='1'><a href='#' id='url_122'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            <li id='li_test2_122'>
+                                <div class='contentElement' data-id='test2_122' data-name='Second Second Child' data-id_par='test2_12' data-orden='2'><a href='#' id='url_test2_122'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
                             </li>
                         </ul>
                     </li>
                 </ul>
             </li>
         </ul>
-
         <ul id='createTreeTest3'>
-            <li id='li_raiz'>
-                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0' data-badge='1'>
-                    <a href='#' id='url_raiz'>Root</a>
+            <li id='li_test3_raiz'>
+                <div class='contentElement' data-id='test3_raiz' data-name='Root' data-orden='1' data-badge='1'>
+                    <a href='#' id='url_test3_raiz'>Root</a>
                     <span class='buttons pull-right'></span>
                 </div>
                 <ul>
-                    <li id='li_11'>
-                        <div class='contentElement' data-id='11' data-name='First Child' data-id_par='-465465' data-orden='0'>
-                            <a href='#' id='url_11'>First Child</a>
+                    <li id='li_test3_11'>
+                        <div class='contentElement' data-id='test3_11' data-name='First Child' data-orden='1' data-id_par='test3_raiz'>
+                            <a href='#' id='url_test3_11'>First Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul></ul>
                     </li>
-                    <li id='li_12'>
-                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1' data-badge='1'>
-                            <a href='#' id='url_12'>Second Child</a>
+                    <li id='li_test3_12'>
+                        <div class='contentElement' data-id='test3_12' data-name='Second Child' data-orden='2' data-id_par='test3_raiz' data-badge='0'>
+                            <a href='#' id='url_test3_12'>Second Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul>
-                            <li id='li_121'>
-                                <div class='contentElement' data-id='121' data-name='First Second Child' data-id_par='-1' data-orden='0'><a href='#' id='url_121'>First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            <!--<li id='li_test3_121'>
+                                <div class='contentElement' data-id='test3_121' data-name='First Second Child' data-orden='1' data-id_par='test3_12'>
+                                    <a href='#' id='url_test3_121'>Root</a>
+                                    <span class='buttons pull-right'></span>
+                                </div>
+                                <ul></ul>
+                            </li>-->
+                            <li id='li_test3_122'>
+                                <div class='contentElement' data-id='test3_122' data-name='Second Second Child' data-orden='2' data-id_par='test3_12'>
+                                    <a href='#' id='url_test3_122'>Second Second Child</a>
+                                    <span class='buttons pull-right'></span>
+                                </div>
+                                <ul></ul>
                             </li>
                         </ul>
                     </li>
                 </ul>
-            </li>
-        </ul>
-
-
+                    </li>
+                </ul>
         <ul id='createTreeTest4'>
-            <li id='li_raiz'>
-                <div class='contentElement' data-id='raiz' data-name='Root' data-orden='0'>
-                    <a href='#' id='url_raiz'>Root</a>
+            <li id='li_test4_raiz'>
+                <div class='contentElement' data-id='test4_raiz' data-name='Root' data-orden='1' data-badge='1'>
+                    <a href='#' id='url_test4_raiz'>Root</a>
                     <span class='buttons pull-right'></span>
                 </div>
                 <ul>
-                    <li id='li_11'>
-                        <div class='contentElement' data-id='11' data-name='First Child' data-orden='0'>
-                            <a href='#' id='url_11'>First Child</a>
+                    <li id='li_test4_11'>
+                        <div class='contentElement' data-id='test4_11' data-name='First Child' data-id_par='test4_raiz' data-orden='1' data-badge='0'>
+                            <a href='#' id='url_test4_11'>First Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul>
-                            <li id='li_111'>
-                                <div class='contentElement' data-id='111' data-name='First First Child' data-orden='0'>
-                                    <a href='#' id='url_111'>First First Child</a>
+                            <li id='li_test4_111'>
+                                <div class='contentElement' data-id='test4_111' data-name='First First Child' data-id_par='test4_11' data-orden='1' data-badge='1'>
+                                    <a href='#' id='url_test4_111'>First First Child</a>
                                     <span class='buttons pull-right'></span>
                                 </div>
                                 <ul>
-                                    <li id='li_1111'>
-                                        <div class='contentElement' data-id='1111' data-name='First First First Child' data-orden='0'><a href='#' id='url_1111'>First First First Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                                    <li id='li_test4_1111'>
+                                        <div class='contentElement' data-id='test4_1111' data-name='First First First Child' data-id_par='test4_111' data-orden='1'><a href='#' id='url_test4_1111'>First First First Child</a><span class='buttons pull-right'></span></div><ul></ul>
                                     </li>
-                                    <li id='li_1112'>
-                                        <div class='contentElement' data-id='1112' data-name='First First Second Child' data-orden='0'><a href='#' id='url_1112'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                                    <li id='li_test4_1112'>
+                                        <div class='contentElement' data-id='test4_1112' data-name='First First Second Child' data-id_par='test4_111' data-orden='2'><a href='#' id='url_test4_1112'>First First Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
-                    <li id='li_12'>
-                        <div class='contentElement' data-id='12' data-name='Second Child' data-orden='1'>
-                            <a href='#' id='url_12'>Second Child</a>
+                    <li id='li_test4_12'>
+                        <div class='contentElement' data-id='test4_12' data-name='Second Child' data-id_par='test4_raiz' data-orden='2' data-badge='1'>
+                            <a href='#' id='url_test4_12'>Second Child</a>
                             <span class='buttons pull-right'></span>
                         </div>
                         <ul>
-                            <li id='li_121'>
-                                <div class='contentElement' data-id='121' data-name='Second First Child' data-id_par='1' data-orden='0'><a href='#' id='url_121'>Second First Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            <li id='li_test4_121'>
+                                <div class='contentElement' data-id='test4_121' data-name='Second First Child' data-id_par='test4_12' data-orden='1'><a href='#' id='url_test4_121'>Second First Child</a><span class='buttons pull-right'></span></div><ul></ul>
                             </li>
-                            <li id='li_122'>
-                                <div class='contentElement' data-id='122' data-name='Second Second Child' data-orden='0'><a href='#' id='url_121'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
+                            <li id='li_test4_122'>
+                                <div class='contentElement' data-id='test4_122' data-name='Second Second Child' data-id_par='test4_12' data-orden='2'><a href='#' id='url_test4_122'>Second Second Child</a><span class='buttons pull-right'></span></div><ul></ul>
                             </li>
                         </ul>
                     </li>
@@ -199,6 +210,61 @@
             </li>
         </ul>
 
+        <div id='test1_container_original'>
+            <ul id='ul_t1'>
+                <li id='li_t1_0'>
+                    <div class='contentElement' data-id='t1_0' data-name='Zero' data-orden='1' data-badge='1'><a href='#' id='url_t1_0'>Zero</a><span class='buttons pull-right' /></div>
+                    <ul>
+                        <li id='li_t1_1'>
+                            <div class='contentElement' data-id='t1_1' data-name='One' data-orden='1' data-id_par='t1_0' data-badge='1'><a href='#' id='url_t1_1'>One</a><span class='buttons pull-right' /></div>
+                            <ul>
+                                <li id='li_t1_11'>
+                                    <div class='contentElement' data-id='t1_11' data-name='One One' data-id_par='t1_1' data-orden='1'><a href='#' id='url_t1_11'>One One</a><span class='buttons pull-right' /></div>
+                                    <ul></ul>
+                                </li>
+                                <li id='li_t1_12'>
+                                    <div class='contentElement' data-id='t1_12' data-name='One Two' data-id_par='t1_1' data-orden='2'><a href='#' id='url_t1_12'>One Two</a><span class='buttons pull-right' /></div>
+                                    <ul></ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id='li_t1_2'>
+                            <div class='contentElement' data-id='t1_2' data-name='Two' data-id_par='t1_0' data-orden='2'><a href='#' id='url_t1_2'>Two</a><span class='buttons pull-right' /></div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id='test1_container_original2'>
+            <ul id='ul_t1'>
+                <li id='li_t1_0'>
+                    <div class='contentElement' data-id='t1_0' data-name='Zero' data-orden='1' data-badge='1'><a href='#' id='url_t1_0'>Zero</a><span class='buttons pull-right' /></div>
+                    <ul>
+                        <li id='li_t1_1'>
+                            <div class='contentElement' data-id='t1_1' data-name='One' data-orden='1' data-id_par='t1_0' data-badge='1'><a href='#' id='url_t1_1'>One</a><span class='buttons pull-right' /></div>
+                            <ul>
+                                <li id='li_t1_11'>
+                                    <div class='contentElement' data-id='t1_11' data-name='One One' data-id_par='t1_1' data-orden='1'><a href='#' id='url_t1_11'>One One</a><span class='buttons pull-right' /></div>
+                                    <ul></ul>
+                                </li>
+                                <li id='li_t1_12'>
+                                    <div class='contentElement' data-id='t1_12' data-name='One Two' data-id_par='t1_1' data-orden='2'><a href='#' id='url_t1_12'>One Two</a><span class='buttons pull-right' /></div>
+                                    <ul></ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id='li_t1_2'>
+                            <div class='contentElement' data-id='t1_2' data-name='Two' data-id_par='t1_0' data-orden='2'><a href='#' id='url_t1_2'>Two</a><span class='buttons pull-right' /></div>
+                            <ul></ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div id="test2_container_original"><ul id="test2_original"></ul></div>
+        <div id="test2_container_sortable"><ul id="test2_sortable"></ul></div>
 
     </div>
             <!-- Tests -->
