@@ -166,10 +166,9 @@ Using the data API, you can also specify the following icons:
 **OPTIONS**
 
 Passing options to the plugin you can also specify the following icons:
+
 * `navTreeExpanded`: Use the Font Awesome icon `fa fa-plus-square` next to expanded items.
 * `navTreeCollapsed`: Use the Font Awesome icon `fa fa-minus-square` next to expanded items.
-* `iconDeleteButton`: Use the Font Awesome icon `fa fa-trash-o fa-fw` next to expanded items.
-* `iconEditButton"`: Use the Font Awesome icon `fa fa-pencil-square-o` next to expanded items.
 
 The following options allows configure the datasource:
 
@@ -184,14 +183,11 @@ The following options allows configure the datasource:
 
 *Events*
 
-* `onClickEditButton`: This callback will be called if edit button is pressed. 
-* `onClickDeleteButton`: This callback will be called if delete button is pressed. 
 * `doubleTap`: This callback will be called if double click on a element is performed.
 
 *Render Options*
+
 * `createBadge`: This options add a badge to each element who has childs. (`Default`=`false`)
-* `showEditButton`: This option enable an edit button when mouse is hover an element. (`Default`=`false`)
-* `showDeleteButton`: This option enable a delete button when mouse is hover an element. (`Default`=`false`)
 * `enableDragDrop`: This option enable a sortable tree. Requires (jquery.mjs.nestedSortable.js) . (`Default`=`false`)
 * `treeClasses`: This classes will be appended to default tree-nav classes . (`Default`=``)
 * `treeId`: This option specify the id of the first ul element. (`Default`=`myTree`)
