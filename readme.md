@@ -16,7 +16,7 @@ gem install sassc
 ```
 Example
 -------
-![Bootstrap Tree Nav by Morris Singer](http://www.bitsdelocos.es/wp-content/uploads/2016/08/workingtree.png)
+![Bootstrap Tree Nav by Morris Singer](http://www.bitsdelocos.es/wp-content/uploads/2016/08/workingtree-1.png)
 
 Quick start
 -----------
@@ -195,6 +195,30 @@ The following options allows configure the datasource:
 * `enableDragDrop`: This option enable a sortable tree. Requires (jquery.mjs.nestedSortable.js) . (`Default`=`false`)
 * `treeClasses`: This classes will be appended to default tree-nav classes . (`Default`=``)
 * `treeId`: This option specify the id of the first ul element. (`Default`=`myTree`)
+
+*Buttons*
+This option enable a toolbar on hover icon. Every object on this array must have the following fields:
+* `label`: This will be the title of the button-
+* `click`: This field is a function, it will be called when the event click would be fired.
+* `icon`: Font Awesome icon of the button. 
+* `class`: String, this will be added to the icon default classes-
+
+```js
+ buttons: [
+   {
+	   label: 'Edit',
+	   click: function (e, data) {console.log(data);},
+	   icon: 'fa fa-pencil-square-o',
+	   'class': 'test'
+   },
+   {
+	   label: 'Delete',
+	   click: function (e, dataRow) { },
+	   icon: 'fa fa-trash-o fa-fw',
+	   'class': ''
+   }
+],
+```
 
 
 Authors

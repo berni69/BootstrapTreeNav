@@ -80,11 +80,25 @@
                     createBadge: true,
                     doubleTap: doubleTap,
                     enableDragDrop: true,
-                    showDeleteButton: true,
-                    showEditButton: true,
-                    onClickEditButton: function (e, data) {
+                    buttons: [
+                       {
+                           label: 'Edit',
+                           click: function (e, data) {console.log(data);},
+                           icon: 'fa fa-pencil-square-o',
+                           'class': 'test'
+                       },
+                       {
+                           label: 'Delete',
+                           click: function (e, dataRow) { },
+                           icon: 'fa fa-trash-o fa-fw',
+                           'class': ''
+                       }
+                    ],
+                    //showDeleteButton: true,
+                    //showEditButton: true,
+                    /*onClickEditButton: function (e, data) {
                         console.log(data);
-                    }
+                    }*/
 
 
                 });

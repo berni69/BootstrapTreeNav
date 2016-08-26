@@ -1,8 +1,8 @@
 if (!jQuery) { throw new Error('Bootstrap Tree Nav requires jQuery'); }
-if(typeof chai !== 'undefined'){
-	var navTreeTesting = function (){};
+if (typeof chai !== 'undefined') {
+    var navTreeTesting = function () { };
 	
-}	
+}
 /* ==========================================================
  * bootstrap-treenav.js
  * https://github.com/morrissinger/BootstrapTreeNav
@@ -27,7 +27,7 @@ if(typeof chai !== 'undefined'){
     'use strict';
     
     var _options = [];
-   /**
+    /**
     * function getData(arg)
 	* This function will return all attrib of div elements who's name starts with 'data-', example data-id,data-badge,...
     * @param li: DOM element who has div children
@@ -35,8 +35,8 @@ if(typeof chai !== 'undefined'){
     var getData = function (li) {
         var attrs = [];
         $(li).children('div').each(function () {
-			$.each(this.attributes, function () {
-				if (this.specified && this.name.startsWith('data-') && this.name.replace('data-', '').length > 0) {
+            $.each(this.attributes, function () {
+                if (this.specified && this.name.startsWith('data-') && this.name.replace('data-', '').length > 0) {
                     attrs[this.name.replace('data-', '')] = this.value;
                 }
             });
@@ -118,7 +118,7 @@ if(typeof chai !== 'undefined'){
             $(li).children('div').append('<span class="badge pull-right">' + $(li).children('div').attr('data-badge') + '</span>');
         }
     };
-    
+    /**  
     var createButton = function (li, options, action,callback) {
         var $buttons = $(li).children('div').children('span.buttons');
         $buttons.children('.' + action).remove();
@@ -126,7 +126,6 @@ if(typeof chai !== 'undefined'){
             $buttons.append('<button class="btn btn-xs  btn-default ' + action + '" title="' + action + '"><i class="' + options['icon' + action + 'Button'] + '" aria-hidden="true"></i></button>');
             if(typeof callback === 'function' ){
                 $('button.' + action).off('click').on('click', function (e) {
-
                     var data = getData($(this).parents('li').first());
                     callback(e, data);
                     
@@ -134,10 +133,42 @@ if(typeof chai !== 'undefined'){
             }            
         }
     };
-
+   */
+    var myHash = function (str) {
+        /* jshint bitwise: false */ 
+        var hash = 0; var i; var chr; var len;
+        if (str.length === 0) { return hash; }
+        for (i = 0, len = str.length; i < len; i++) {
+            chr = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+        return hash;
+       /* jshint bitwise: true */ 
+    };
+    var createButton = function (li, button) {
+        var $buttons = $(li).children('div').children('span.buttons');
+        //$buttons.children('.' + action).remove();
+        // if (options['show' + action + 'Button']) {
+        var hash = myHash(button.class + button.label);
+        $buttons.append('<button class="btn btn-xs  btn-default '+ hash +' ' + button.class + '" title="' + button.label + '"><i class="' + button.icon + '" aria-hidden="true"></i></button>');
+        if (typeof button.click === 'function') {
+            $('button.' + hash).off('click').on('click', function (e) {
+                var data = getData($(this).parents('li').first());
+                button.click(e, data);
+                    
+            });
+        }
+        //}
+    };
     var createButtons = function (li, options) {
-        createButton(li, options, 'Edit', options.onClickEditButton);        
-        createButton(li, options, 'Delete', options.onClickDeleteButton);
+        $(li).children('div').children('span.buttons').html('');
+        options.buttons.forEach(function (obj) {
+            createButton(li, obj);
+        });
+
+
+
     };
     
     var createOpener = function (element, options, status) {
@@ -187,7 +218,7 @@ if(typeof chai !== 'undefined'){
             collapsibleAll($(li), options);
             createButtons(li, options);
             appendBadge(li, options);
-
+            
             // Expand the tree so that the active item is shown.
             if ($(li).hasClass('active')) {
                 $(li).parents('ul').each(function (i, ul) {
@@ -214,7 +245,7 @@ if(typeof chai !== 'undefined'){
         $tree.navTree($tree.data());
     });
     
-   	
+    
     
     var updateTree = function (ul, options, parentId) {
         var idx = 0;
@@ -223,14 +254,14 @@ if(typeof chai !== 'undefined'){
         $(ul).children().each(function () {
             var $div = $(this).children('div');
             $div.attr('data-' + options.orderMember, idx);
-            $div.attr('data-' + options.parentMember, parentId);            
+            $div.attr('data-' + options.parentMember, parentId);
             updateTree($(this).children('ul').first(), options, $div.attr('data-' + options.idMember));
             $div.attr('data-badge', $(this).children('ul').first().children().length);
             /** UI OPTIONS **/
             createButtons(this, options);
             appendBadge(this, options);
             createOpener(this, options, 'opened');
-
+            
             idx++;
         });
     };
@@ -286,10 +317,10 @@ if(typeof chai !== 'undefined'){
         } else if (typeof args === 'object' || !args) {
             options = $.extend(defaults, args);
             _options = options;
-
+            
             if (options.enableDragDrop && typeof $.fn.nestedSortable !== 'function') {
                 throw new Error('Bootstrap Tree Nav drag and drop requires jquery-ui-nestedSortable plugin');
-            }      
+            }
             return this.each(function () {
                 
                 if ($(this).prop('tagName') === 'LI') {
@@ -313,30 +344,31 @@ if(typeof chai !== 'undefined'){
     $.fn.navTree.defaults = {
         navTreeExpanded: 'fa fa-plus-square',
         navTreeCollapsed: 'fa fa-minus-square',
-        iconDeleteButton: 'fa fa-trash-o fa-fw',
-        iconEditButton: 'fa fa-pencil-square-o',
+        /*iconDeleteButton: 'fa fa-trash-o fa-fw',
+        iconEditButton: 'fa fa-pencil-square-o',*/
         orderMember: 'orden',
         parentMember: 'par_id',
         idMember : 'id',
         nameMember : 'name',
-        showEditButton: false,
+        buttons: [],
+		/*showEditButton: false,        
         showDeleteButton: false,
         onClickEditButton: function (e, dataRow) { },
-        onClickDeleteButton: function (e, dataRow) { },
+        onClickDeleteButton: function (e, dataRow) { },*/
         doubleTap: function (e, dataRow) { },
         enableDragDrop: false,
         source: null,
         treeId: 'myTree',
         treeClasses: '',
         createBadge: false,
-    };   
+    };
     
-	/** Only for testing purposes **/
-	if(typeof navTreeTesting !== 'undefined'){
-		navTreeTesting.getData = getData;
-		navTreeTesting.createTree = createTree;
-		navTreeTesting.sortable = sortable;
-	}	
+    /** Only for testing purposes **/
+    if (typeof navTreeTesting !== 'undefined') {
+        navTreeTesting.getData = getData;
+        navTreeTesting.createTree = createTree;
+        navTreeTesting.sortable = sortable;
+    }
 	
 	
 }(window.jQuery);
