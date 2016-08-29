@@ -105,7 +105,7 @@ if (typeof chai !== 'undefined') {
         }
         childHtml = childHtml + '</ul>';
         
-        return '<li  id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a><span class="buttons pull-right" /></div>' + childHtml + '</li>';
+        return '<li id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a><span class="buttons pull-right" /></div>' + childHtml + '</li>';
     };
     
     var expand = function (li) {
@@ -155,18 +155,17 @@ if (typeof chai !== 'undefined') {
     };
     var createButton = function (li, button) {
         var $buttons = $(li).children('div').children('span.buttons');
-        //$buttons.children('.' + action).remove();
-        // if (options['show' + action + 'Button']) {
         var hash = myHash(button.class + button.label);
-        $buttons.append('<button class="btn btn-xs  btn-default '+ hash +' ' + button.class + '" title="' + button.label + '"><i class="' + button.icon + '" aria-hidden="true"></i></button>');
+
+		$buttons.append('<button class="btn btn-xs  btn-default ' + hash + ' ' + button.class + '" title="' + button.label + '"><i class="' + button.icon + '" aria-hidden="true"></i></button>');
         if (typeof button.click === 'function') {
             $('button.' + hash).off('click').on('click', function (e) {
                 var data = getData($(this).parents('li').first());
                 button.click(e, data);
                     
             });
-        }
-        //}
+		}
+
     };
     var createButtons = function (li, options) {
         $(li).children('div').children('span.buttons').html('');
@@ -176,12 +175,13 @@ if (typeof chai !== 'undefined') {
 
 
 
-    };
-    
-    var createOpener = function (element, options, status) {
+	};
+
+    var createOpener = function (element, options) {
         $(element).children('div').children('span.opener').remove();
         var $childUl = $(element).children('ul');
-        if ($childUl.length > 0 && $childUl.children().length) {
+		if ($childUl.length > 0 && $childUl.children().length) {
+			var status = $($childUl).is(':visible') ? 'opened' : 'closed'; 
             $(element).children('div').prepend('<span class="opener ' + status + '"><span class="tree-icon-closed"><i class="' + options.navTreeCollapsed + ' aria-hidden="true"></i></span><span class="tree-icon-opened"><i class="' + options.navTreeExpanded + '"></i></span></span>');
             $(element).children('div').children('a').first().off('click.bs.tree').on('click.bs.tree', function (e) {
                 e.preventDefault();
@@ -214,7 +214,7 @@ if (typeof chai !== 'undefined') {
         var $childUl = $(element).children('ul');
         $childUl.removeClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses).addClass('nav nav-pills nav-stacked nav-tree ' + options.treeClasses);
         $childUl.hide();
-        createOpener(element, options, 'closed');
+        createOpener(element, options);
     };
     
     var collapsible = function (ul, options) {
@@ -231,8 +231,8 @@ if (typeof chai !== 'undefined') {
                 $(li).parents('ul').each(function (i, ul) {
                     $(ul).show();
                     $(ul).siblings('div').children('span.opener').first()
-               .removeClass('closed')
-               .addClass('opened');
+				   .removeClass('closed')
+				   .addClass('opened');
                     
                     // If there's a real target to this menu item link, then allow it to be
                     // clicked to go to that page, now that the menu has been expanded.
@@ -267,8 +267,7 @@ if (typeof chai !== 'undefined') {
             /** UI OPTIONS **/
             createButtons(this, options);
             appendBadge(this, options);
-            createOpener(this, options, 'opened');
-            
+            createOpener(this, options);            
             idx++;
         });
     };
@@ -295,7 +294,15 @@ if (typeof chai !== 'undefined') {
             
         });
     };
-    
+
+	var createAfter = function (ul, idAfterElement, data) {
+		data.id = jQuery('[id^=li_]').sort(function (a, b) { return b.id.replace('li_', '') - a.id.replace('li_', ''); }).first() + 1;
+		var element = createTree(data, _options);
+		$(element).inserAfter('#' + idAfterElement);
+		updateTree(ul, _options);
+
+	};
+
     var _getJsonTree = function (ul, options) {
         var jsonTree = [];
         $(ul).children().each(function () {
@@ -310,7 +317,10 @@ if (typeof chai !== 'undefined') {
     var methods = {
         getJsonTree : function () {
             return _getJsonTree($(this).children('ul'), _options);
-        }
+		},
+		createAfter: function (idAfterElement,data) {
+			return createAfter($(this).children('ul'),idAfterElement,data);
+		}
     };
     //Main function of navTree plugin
     $.fn.navTree = function (args) {
@@ -351,17 +361,11 @@ if (typeof chai !== 'undefined') {
     $.fn.navTree.defaults = {
         navTreeExpanded: 'fa fa-plus-square',
         navTreeCollapsed: 'fa fa-minus-square',
-        /*iconDeleteButton: 'fa fa-trash-o fa-fw',
-        iconEditButton: 'fa fa-pencil-square-o',*/
         orderMember: 'orden',
         parentMember: 'par_id',
         idMember : 'id',
         nameMember : 'name',
         buttons: [],
-		/*showEditButton: false,        
-        showDeleteButton: false,
-        onClickEditButton: function (e, dataRow) { },
-        onClickDeleteButton: function (e, dataRow) { },*/
         doubleTap: function (e, dataRow) { },
         enableDragDrop: false,
         source: null,
