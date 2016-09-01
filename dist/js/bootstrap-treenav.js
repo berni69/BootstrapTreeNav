@@ -40,10 +40,10 @@ if (typeof chai !== 'undefined') {
     * @param li: DOM element who has div children
     */
     var getData = function (li) {
-        var attrs = [];
+        var attrs = {};
         $(li).children('div').each(function () {
             $.each(this.attributes, function () {
-                if (this.specified && this.name.startsWith('data-') && this.name.replace('data-', '').length > 0) {
+				if (this.specified && this.name.startsWith('data-') && this.name.replace('data-', '').length > 0 && !this.name.includes('badge')) {
                     attrs[this.name.replace('data-', '')] = this.value;
                 }
             });
@@ -77,10 +77,13 @@ if (typeof chai !== 'undefined') {
      * @param level: This expects the current deep
 	 *
      */
-    var createTree = function (Node, options, level) {
+    var createTree = function (Node, options, isNewElement) {
         
-        var hasChildren = typeof Node.children !== 'undefined';
-        var attribs = '';
+		var hasChildren = typeof Node.children !== 'undefined';
+		var isNew = typeof isNewElement !== 'undefined' ? isNewElement : false;
+		var attribs = '';
+
+		var liId = '';
         var childHtml = '';
         
         Object.keys(Node).forEach(function (member) {
@@ -95,17 +98,21 @@ if (typeof chai !== 'undefined') {
             var child = [];
             Object.keys(Node.children).forEach(function (key) {
                 var childNode = Node.children[key];
-                var x = level + 1;
-                child[childNode[options.orderMember]] = createTree(childNode, options, x) + '\n';
+				child[childNode[options.orderMember]] = createTree(childNode, options, isNew) + '\n';
             });
             child.forEach(function (obj) {
                 childHtml = childHtml + obj;
             });
             attribs = attribs + 'data-badge="' + (Object.keys(Node.children).length - 1) + '" ';
         }
-        childHtml = childHtml + '</ul>';
-        
-        return '<li id="li_' + Node.id + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a><span class="buttons pull-right" /></div>' + childHtml + '</li>';
+		childHtml = childHtml + '</ul>';
+		if (isNew) {
+			liId = parseInt(jQuery('[id^=li_]').sort(function (a, b) { return b.id.replace('li_', '') - a.id.replace('li_', ''); }).first().attr('id').replace('li_', '')) + 1;
+		}
+		else {
+			liId = Node.id;
+		}
+		return '<li id="li_' + liId + '"><div class="contentElement" ' + attribs + '><a href="#" id="url_' + Node[options.idMember] + '">' + Node[options.nameMember] + '</a><span class="buttons pull-right" /></div>' + childHtml + '</li>';
     };
     
     var expand = function (li) {
@@ -290,15 +297,24 @@ if (typeof chai !== 'undefined') {
             startCollapsed: false,
             relocate: function (e, e2) {
                 updateTree($(container).children('ul'), options, 0);
+				if (typeof options.onDragDrop === 'function'){
+					options.onDragDrop(e,_getJsonTree($(container).children('ul'),options));
+				}
             }
             
         });
     };
 
 	var createAfter = function (ul, idAfterElement, data) {
-		data.id = jQuery('[id^=li_]').sort(function (a, b) { return b.id.replace('li_', '') - a.id.replace('li_', ''); }).first() + 1;
-		var element = createTree(data, _options);
-		$(element).inserAfter('#' + idAfterElement);
+		var element = createTree(data, _options, true);
+		$(element).insertAfter('#' + idAfterElement);
+		updateTree(ul, _options);
+
+	};
+	var deleteNode = function (ul, id) {
+		console.log(id);
+		console.log($('#' + id));
+		$('#' + id).remove();
 		updateTree(ul, _options);
 
 	};
@@ -318,9 +334,13 @@ if (typeof chai !== 'undefined') {
         getJsonTree : function () {
             return _getJsonTree($(this).children('ul'), _options);
 		},
-		createAfter: function (idAfterElement,data) {
-			return createAfter($(this).children('ul'),idAfterElement,data);
+		createAfter: function (data) {
+			return createAfter($(this).children('ul'),data.id,data.data);
+		},
+		deleteNode: function (data) {
+			return deleteNode($(this).children('ul'), data.id);
 		}
+
     };
     //Main function of navTree plugin
     $.fn.navTree = function (args) {
@@ -329,8 +349,8 @@ if (typeof chai !== 'undefined') {
         if (methods[args]) {
             
             options = $.extend(defaults, _options);
-            _options = options;
-            return methods[ args ].apply(this, Array.prototype.slice.call(arguments, 1));
+			_options = options;
+			return methods[args].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof args === 'object' || !args) {
             options = $.extend(defaults, args);
             _options = options;
@@ -362,12 +382,13 @@ if (typeof chai !== 'undefined') {
         navTreeExpanded: 'fa fa-plus-square',
         navTreeCollapsed: 'fa fa-minus-square',
         orderMember: 'orden',
-        parentMember: 'par_id',
+        parentMember: 'id_par',
         idMember : 'id',
         nameMember : 'name',
         buttons: [],
         doubleTap: function (e, dataRow) { },
         enableDragDrop: false,
+		onDragDrop : function (e, Tree) { },
         source: null,
         treeId: 'myTree',
         treeClasses: '',
