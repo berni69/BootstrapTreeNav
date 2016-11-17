@@ -339,7 +339,7 @@ if (typeof chai !== 'undefined') {
 		},
 		deleteNode: function (data) {
 			return deleteNode($(this).children('ul'), data.id);
-		}
+        }
 
     };
     //Main function of navTree plugin
